@@ -23,13 +23,14 @@ var defaultSettings;
 var addonsInstalled;
 var currentPath;
 var isOfPathGood = false;
+var isFirstTimeSierra = false;
 var bVerbose = false;
 var localAddons = [];
 
 
 
 //-----------------------------------------------------------------------------------
-// IPC 
+// IPC
 //-----------------------------------------------------------------------------------
 
 //-------------------------------------------
@@ -38,7 +39,7 @@ ipc.on('setOfPath', function(arg) {
 });
 
 ipc.on('cwd', function(arg) {
-    
+
     console.log(arg);
 });
 
@@ -57,7 +58,7 @@ ipc.on('isUpdateMultiplePathOk', function(arg) {
    } else {
         $("#updateMultipleWrongMessage").show();
         $("#updateMultipleButton").addClass("disabled");
-        
+
    }
 });
 
@@ -106,7 +107,7 @@ ipc.on('setAddons', function(arg) {
 
     console.log("got set addons");
     console.log(arg);
-    
+
     addonsInstalled = arg;
 
     var select = document.getElementById("addonsList");
@@ -121,21 +122,25 @@ ipc.on('setAddons', function(arg) {
                 "data-value": arg[i]
             }).html(arg[i]).appendTo(select);
         }
-        
+
+        $("#ofPathSierraMessage").hide();
         $("#ofPathWrongMessage").hide();
         isOfPathGood = true;
 
-       
+
 
     } else {
-
-        $("#ofPathWrongMessage").show();
+        if(isFirstTimeSierra){
+            $("#ofPathSierraMessage").show();
+        }else{
+            $("#ofPathWrongMessage").show();
+        }
         isOfPathGood = false;
         $('#settingsMenuButton').click();
 
         // bounce to settings
         //$('.main .ui').tab('change tab', 'settings')
-        
+
 
 
     }
@@ -155,10 +160,10 @@ ipc.on('setPlatforms', function(arg) {
     console.log("got set platforms");
     console.log(arg);
     console.log("got set platforms");
-    
+
     platforms = arg;
 
-    
+
     var select = document.getElementById("platformList");
     var option, i;
     for (var i in platforms) {
@@ -170,7 +175,7 @@ ipc.on('setPlatforms', function(arg) {
         }).html(platforms[i]).appendTo(select);
     }
 
-    // start the platform drop down. 
+    // start the platform drop down.
     $('#platformsDropdown').dropdown({
             allowAdditions: false
         });
@@ -188,7 +193,7 @@ ipc.on('setPlatforms', function(arg) {
             "data-value": i
         }).html(platforms[i]).appendTo(select);        }
 
-    // start the platform drop down. 
+    // start the platform drop down.
     $('#platformsDropdownMulti')
         .dropdown({
             allowAdditions: false
@@ -227,7 +232,7 @@ ipc.on('selectAddons', function(arg) {
         if (addonsAlreadyPicked.indexOf(arg[i]) >= 0){
             console.log("already picked"); // alread picked
         } else {
-            
+
             // if not picked, check if have it and try to pick it
             if (addonsInstalled.indexOf(arg[i]) >= 0){
                 $('#addonsDropdown').dropdown('set selected', arg[i]);
@@ -235,14 +240,14 @@ ipc.on('selectAddons', function(arg) {
 
                 var neededAddonPathRel = path.join($("#projectPath").val(), $("#projectName").val(), arg[i]);
                 console.log(neededAddonPathRel);
-                if (fs.existsSync(neededAddonPathRel) || 
+                if (fs.existsSync(neededAddonPathRel) ||
                     fs.existsSync(neededAddons[i])){
                     localAddons.push(arg[i]);
                 } else {
                     neededAddons.push(arg[i]);
                 }
 
-                
+
             }
         }
     }
@@ -295,7 +300,7 @@ ipc.on('selectAddons', function(arg) {
 // allow main to send UI messages
 ipc.on('sendUIMessage', function(arg) {
 
-    // check if it has "success" message: 
+    // check if it has "success" message:
 
 
     displayModal(arg);
@@ -360,7 +365,6 @@ function setOFPath(arg) {
 //----------------------------------------
 function setup() {
 
-
     jQuery.fn.extend({
       oneTimeTooltip: function(msg) {
         return this.each(function() {
@@ -378,8 +382,29 @@ function setup() {
       }
     });
 
+
     $(document).ready(function() {
 
+
+        try{
+            var os = require('os');
+
+            var os_release = os.release();
+            var os_major_pos = os_release.indexOf(".");
+            var os_major = os_release.slice(0, os_major_pos);
+
+            var isSierra = (os.platform() === 'darwin' && Number(os_major)>=16);
+            if(isSierra){
+                var ofpath = document.getElementById("ofPath").value;
+                var runningOnVar = false
+                try{
+                    runningOnVar = (ofpath.length >= 8 && ofpath.substring(0,8)==='/private');
+                }catch(e){}
+                isFirstTimeSierra = runningOnVar;
+            }
+        }catch(e){
+            isFirstTimeSierra = false;
+        }
 
         $('.main.menu .item').tab({
             history: false
@@ -394,7 +419,7 @@ function setup() {
                              $('#settingsMenuButton').click();
                         }
                     }).modal("show");
-               }      
+               }
             }
         });
 
@@ -407,7 +432,7 @@ function setup() {
                              $('#settingsMenuButton').click();
                         }
                     }).modal("show");
-               }  
+               }
             }
         });
 
@@ -430,7 +455,7 @@ function setup() {
 
 
 
-        
+
 
         // bind external URLs (load it in default browser; not within Electron)
         $('*[data-toggle="external_target"]').click(function (e) {
@@ -485,7 +510,7 @@ function setup() {
             }
         });
 
-         $("#IDEButton").on("click", function() {  
+         $("#IDEButton").on("click", function() {
             launchInIDE();
          });
 
@@ -505,8 +530,17 @@ function setup() {
 
 
         $("#ofPath").on("change", function(){
-            defaultSettings['defaultOfPath'] =  $("#ofPath").val();
-            console.log("ofPath val " + $("#ofPath").val());
+            var ofpath = $("#ofPath").val();
+            defaultSettings['defaultOfPath'] =  ofpath;
+            console.log("ofPath val " + ofpath);
+            if(isFirstTimeSierra){
+                //var sys = require('sys')
+                var exec = require('child_process').exec;
+                function puts(error, stdout, stderr) { console.log(stdout + " " + stderr) }
+                exec("xattr -d com.apple.quarantine " + ofpath + "/projectGenerator-osx/projectGenerator.app", puts);
+                $("#projectPath").val(ofpath + "/apps/myApps").trigger('change');
+
+            }
             saveDefaultSettings();
 
             console.log("requesting addons");
@@ -517,17 +551,26 @@ function setup() {
 
 
         if (defaultSettings['advancedMode'] === true){
-        	$("#advancedOptions").attr('Checked','Checked'); 
+        	$("#advancedOptions").attr('Checked','Checked');
         }
 
         if (defaultSettings['verboseOutput'] === true){
-            $('#verboseOption').attr('Checked','Checked'); 
+            $('#verboseOption').attr('Checked','Checked');
             bVerbose = true;
         }
 
         // updates ofPath when the field is manually changed
         $("#ofPath").on('blur', function(e){
-            setOFPath($(this).val());
+            var ofpath = $(this).val();
+            setOFPath(ofpath);
+            if(isFirstTimeSierra){
+                //var sys = require('sys')
+                var exec = require('child_process').exec;
+                function puts(error, stdout, stderr) { console.log(stdout + " " + stderr) }
+                exec("xattr -d com.apple.quarantine " + ofpath + "/projectGenerator-osx/projectGenerator.app", puts);
+                $("#projectPath").val(ofpath + "/apps/myApps").trigger('change');
+                //exec("xattr -d com.apple.quarantine " + ofpath + "/projectGenerator-osx/projectGenerator.app", puts);
+            }
         }).on('keypress', function(e){
             if(e.which==13){
                 e.preventDefault();
@@ -546,9 +589,20 @@ function setup() {
         // $("#hideConsole").on('click', function(){ $('body').removeClass('showConsole'); });
 
         // initialise the overall-use modal
-        $("#uiModal, #fileDropModal").modal({
+        $("#uiModal").modal({
             'show': false
         });
+
+        $("#fileDropModal").modal({
+            'show': false,
+            onHide: function () {
+                $('body').removeClass('incomingFile');
+            },
+            onShow: function () {
+                $('body').addClass('incomingFile');
+            }
+        });
+
 
         // show default platform in GUI
         $("#defaultPlatform").html(defaultSettings['defaultPlatform']);
@@ -561,33 +615,40 @@ function setup() {
         //  		$('body').removeClass('page-create_update page-settings page-advanced').addClass( 'page-' + $(e.target).attr("href").replace('#', '') );
         // });
 
-        
-        // setup the multi update list as well. 
 
-
+        // setup the multi update list as well.
 
         $("#ofPath").change();
 
         // enable tool tips
         $('.tooltip').popup();
-        
+
         // Open file drop zone
-        $('body').on('dragenter', openDragInputModal);
+        $(window).on('dragbetterenter', openDragInputModal);
+        $(window).on('dragenter', openDragInputModal);
 
-        //Close file drop zone
-        $(window).on('mouseout', closeDragInputModal );
-        $(document).on('dragend', closeDragInputModal );
+        // Close file drop zone
+        $(window).on('dragbetterleave', closeDragInputModal );
+        $(window).on('mouseleave', closeDragInputModal );
 
-        // prevent dropping anywhere (dropping files loads them)
-        // note: yes, dragover is also needed
-        $(window).on('drop dragover', function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
+        // prevent dropping anywhere (dropping files loads their URL, unloading the PG)
+        // note: weirdly, dragover is also needed
+        $(window).on('drop dragover', blockDragEvent );
+        //$(window).on('dragleave', blockDragEvent);
+
+        $("#dropZoneOverlay").on('drop', onDropFile).on('dragend', closeDragInputModal);
+
+        // this allows to close the drop zone if it ever stays open due to a bug.
+        $("#dropZoneOverlay").on('click', closeDragInputModal);
+        $(window).on('keypress', function(e){
+            if( e.which === 27 ){ // esc key
+                e.stopPropagation();
+                e.preventDefault();
+                closeDragInputModal( e );
+            }
         });
 
-        
-        // bind update thingy
+        // listen for drag events
         // note: dragover is needed because dragleave is called pretty randomly
         $("#dropZoneUpdate").on('dragenter dragover drop', onDragUpdateFile).on('dragleave', function(e){
             $(this).removeClass("accept deny");
@@ -596,67 +657,125 @@ function setup() {
     });
 }
 
-function onDragUpdateFile( e ){
-    e.preventDefault();
-    e.stopPropagation();
+function blockDragEvent(e){
+    //console.log('blockDragEvent via '+e.type + ' on '+ e.target.nodeName + '#' + e.target.id);
 
-    // handle file
+    // open drop overlay if not already open
+    if( !$('body').hasClass('incomingFile') ){
+        $(window).triggerHandler('dragbetterenter');
+    }
+
+    e.stopPropagation();
+    e.preventDefault();
+    return false;
+};
+
+function acceptDraggedFiles( e ){
+     // handle file
     var files = e.originalEvent.dataTransfer.files;
     var types = e.originalEvent.dataTransfer.types;
 
-    var rejected = true;
     // this first check filters out most files
-    if(files.length == 1 && files[0].type==="" && types[0]=="Files"){
+    if(files && files.length == 1 && files[0].type==="" && types[0]=="Files"){
 
         // this folder check is more relayable
         var file = e.originalEvent.dataTransfer.items[0].webkitGetAsEntry();
         if( file.isDirectory ){
-            rejected = false;
-            $("#dropZoneUpdate").addClass("accept").removeClass("deny");
-
-            // drop event ? --> import it!
-            if( e.type=="drop" ){
-                $("#projectName").val( files[0].name );
-                var regExp = new RegExp("\\b/"+files[0].name+"\\b","gi");
-                $("#projectPath").val( files[0].path.replace(regExp,"") ).trigger('change');
-
-                $("createMenuButon").trigger('click');
-                return true;
-            }
-        }
-    }
-
-    if(rejected) {
-        $("#dropZoneUpdate").addClass("deny").removeClass("accept");
-
-        if( e.type=="drop" ){
-            displayModal(
-                "The file you dropped is not compatible for importing.<br>"+
-                "To import an OpenFrameworks project, drag & drop the whole project folder."
-            );
+            return true;
         }
     }
     return false;
 }
 
-function closeDragInputModal(e){
-    e.preventDefault();
+function onDragUpdateFile( e ){
     e.stopPropagation();
+    e.preventDefault();
+    //console.log('onDragUpdateFile via '+e.type + ' on '+ e.target.nodeName + '#' + e.target.id);
 
-    if( $('body').hasClass('incommingFile') ){
-        $('body').removeClass('incommingFile');
-        $("#fileDropModal").modal('hide');
-        $("#dropZoneUpdate").removeClass("accept deny");
+    if( !$('body').hasClass('incomingFile') ){
+        return false;
     }
+
+   if( acceptDraggedFiles( e ) ){
+        $("#dropZone").addClass("accept").removeClass("deny");
+        return true;
+    }
+    // files are rejected
+    else {
+        $("#dropZone").addClass("deny").removeClass("accept");
+    }
+    return false;
+}
+
+function onDropFile( e ){
+    e.stopPropagation();
+    e.preventDefault();
+
+   if( acceptDraggedFiles( e ) ){
+        $("#dropZone").addClass("accept").removeClass("deny");
+
+        if( $('body').hasClass('advanced') && false ){ // todo: if (tab multiple is open)
+            // do batch import
+
+            $("updateMenuButton").triggerHandler('click');
+        }
+        else {
+            var files = e.originalEvent.dataTransfer.files;
+            // import single project folder
+            $("#projectName").val( files[0].name );
+            var regExp = new RegExp("\\b/"+files[0].name+"\\b","gi");
+            $("#projectPath").val( files[0].path.replace(regExp,"") ).triggerHandler('change');
+
+            $("createMenuButon").triggerHandler('click');
+        }
+        closeDragInputModal(e);
+        return true;
+    }
+    // files are rejected
+    else {
+        $("#dropZone").addClass("deny").removeClass("accept");
+
+        displayModal(
+                "The file you dropped is not compatible for importing.<br>"+
+                "To import an OpenFrameworks project, drag & drop the whole project folder."
+        );
+    }
+    return false;
+}
+
+function closeDragInputModal(e){
+    e.stopPropagation();
+    e.preventDefault();
+
+    //console.log('closeDragInputModal via '+e.type + ' on '+ e.target.nodeName + '#' + e.target.id);
+
+    // Prevent closing the modal while still fading in
+    // if( $("#fileDropModal").filter('.ui.modal:not(.fade.in)').length===0 ){
+    //     return;
+    // }
+
+    $("#fileDropModal").modal('hide');
+    $("#dropZone").removeClass("accept deny");
+    
+    return false;
 }
 
 function openDragInputModal(e){
-    e.preventDefault();
     e.stopPropagation();
-    if(!$('body').hasClass('incommingFile')){
-        $('body').addClass('incommingFile');
+    e.preventDefault();
+
+    //console.log('openDragInputModal via '+e.type + ' on '+ e.target.nodeName + '#' + e.target.id);
+
+    if( !$('body').hasClass('incomingFile') ){
         $("#fileDropModal").modal('show');
-    } 
+    }
+
+    // check filetype when entering droppable zone
+    if( e.type==='dragenter' ){
+        onDragUpdateFile(e);
+    }
+
+    return false;
 }
 
 //----------------------------------------
@@ -689,13 +808,13 @@ function generate() {
 
     for (var i = 0; i < addonsPicked.length; i++){
         addonValueArray.push($(addonsPicked[i]).attr("data-value"));
-    }    
+    }
 
     // add any local addons
     for (var i = 0; i < localAddons.length; i++){
         addonValueArray.push(localAddons[i]);
     }
-    
+
     var lengthOfPlatforms = platformValueArray.length;
 
     var gen = {};
@@ -726,11 +845,11 @@ function updateRecursive() {
 
     // get the path and the platform list
 
-    
+
     //platformsDropdownMulti
 
-    
-    
+
+
     var platformsPicked = $("#platformsDropdownMulti  .active");
     var platformValueArray = [];
     for (var i = 0; i < platformsPicked.length; i++){
@@ -771,9 +890,9 @@ function switchGenerateMode(mode) {
         $("#adons-refresh-icon").hide();
 
         console.log('Switching GenerateMode to Update...');
-        
+
         clearAddonSelection();
-        
+
     }
     // [default]: switch to createMode (generate new projects)
     else {
@@ -790,8 +909,8 @@ function switchGenerateMode(mode) {
 
         console.log('Switching GenerateMode to Create...');
 
-        
-        
+
+
     }
 }
 
@@ -941,4 +1060,3 @@ function launchInIDE(){
 
     ipc.send('launchProjectinIDE', project );
 }
-

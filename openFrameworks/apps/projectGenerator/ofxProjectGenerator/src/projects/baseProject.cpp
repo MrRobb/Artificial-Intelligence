@@ -11,6 +11,7 @@
 #include "ofLog.h"
 #include "Utils.h"
 #include "ofConstants.h"
+#include <list>
 using namespace std;
 
 baseProject::baseProject(string _target){
@@ -263,6 +264,11 @@ void baseProject::addAddon(ofAddon & addon){
 
 	addons.push_back(addon);
 
+	ofLogVerbose("baseProject") << "libs in addAddon " << addon.libs.size();
+	for(auto & lib: addon.libs){
+		ofLogVerbose("baseProject") << lib.path;
+	}
+
     for(int i=0;i<(int)addon.includePaths.size();i++){
         ofLogVerbose() << "adding addon include path: " << addon.includePaths[i];
         addInclude(addon.includePaths[i]);
@@ -303,6 +309,10 @@ void baseProject::addAddon(ofAddon & addon){
         ofLogVerbose() << "adding addon header srcFiles: " << addon.headersrcFiles[i];
         addSrc(addon.headersrcFiles[i],addon.filesToFolders[addon.headersrcFiles[i]],HEADER);
     }
+	for (int i = 0; i<(int)addon.defines.size(); i++) {
+		ofLogVerbose() << "adding addon defines: " << addon.defines[i];
+		addDefine(addon.defines[i]);
+	}
 }
 
 void baseProject::parseAddons(){
@@ -338,3 +348,16 @@ void baseProject::parseConfigMake(){
     }
 
 }
+
+void baseProject::recursiveCopyContents(const ofDirectory & srcDir, ofDirectory & destDir){
+    for(auto & f: srcDir){
+        if(f.isDirectory()){
+            ofDirectory srcSubDir(f.path());
+            ofDirectory destSubDir(ofFilePath::join(destDir.path(),f.getFileName()));
+            recursiveTemplateCopy(srcSubDir, destSubDir);
+        }else{
+            f.copyTo(ofFilePath::join(destDir.path(),f.getFileName()),false,true);
+        }
+    }
+}
+

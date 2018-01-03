@@ -32,6 +32,8 @@ ofAddon::ConfigParseState ofAddon::stateFromString(string name){
 	if(name=="linuxarmv7l") return LinuxARMv7;
 	if(name=="android/armeabi") return AndroidARMv5;
 	if(name=="android/armeabi-v7a") return AndroidARMv7;
+	if(name=="android/x86") return Androidx86;
+	if(name=="emscripten") return Emscripten;
 	if(name=="ios") return iOS;
 	if(name=="osx") return OSX;
 	return Unknown;
@@ -59,6 +61,10 @@ string ofAddon::stateName(ofAddon::ConfigParseState state){
 		return "android/armeabi";
 	case AndroidARMv7:
 		return "android/armeabi-v7a";
+	case Androidx86:
+		return "android/x86";
+	case Emscripten:
+		return "emscripten";
 	case iOS:
 		return "ios";
 	case OSX:
@@ -84,6 +90,8 @@ bool ofAddon::checkCorrectPlatform(ConfigParseState state){
 	case LinuxARMv7:
 	case AndroidARMv5:
 	case AndroidARMv7:
+	case Androidx86:
+	case Emscripten:
 	case iOS:
 	case OSX:
 		return platform==stateName(state);
@@ -107,10 +115,12 @@ bool ofAddon::checkCorrectVariable(string variable, ConfigParseState state){
 	case LinuxARMv7:
 	case AndroidARMv5:
 	case AndroidARMv7:
+	case Androidx86:
+	case Emscripten:
 	case iOS:
 	case OSX:
 		return (variable == "ADDON_DEPENDENCIES" || variable == "ADDON_INCLUDES" || variable == "ADDON_CFLAGS" || variable == "ADDON_CPPFLAGS" || variable == "ADDON_LDFLAGS"  || variable == "ADDON_LIBS" || variable == "ADDON_PKG_CONFIG_LIBRARIES" ||
-				variable == "ADDON_FRAMEWORKS" || variable == "ADDON_SOURCES" || variable == "ADDON_DATA" || variable == "ADDON_LIBS_EXCLUDE" || variable == "ADDON_SOURCES_EXCLUDE" || variable == "ADDON_INCLUDES_EXCLUDE" || variable == "ADDON_DLLS_TO_COPY");
+				variable == "ADDON_FRAMEWORKS" || variable == "ADDON_SOURCES" || variable == "ADDON_DATA" || variable == "ADDON_LIBS_EXCLUDE" || variable == "ADDON_SOURCES_EXCLUDE" || variable == "ADDON_INCLUDES_EXCLUDE" || variable == "ADDON_DLLS_TO_COPY" || variable == "ADDON_DEFINES");
 	case Unknown:
 	default:
 		return false;
@@ -122,7 +132,7 @@ void ofAddon::addReplaceString(string & variable, string value, bool addToVariab
 	else variable = value;
 }
 
-void ofAddon::addReplaceStringVector(vector<string> & variable, string value, string prefix, bool addToVariable){
+void ofAddon::addReplaceStringVector(std::vector<std::string> & variable, std::string value, std::string prefix, bool addToVariable){
 	vector<string> values;
 	if(value.find("\"")!=string::npos){
 		values = ofSplitString(value,"\"",true,true);
@@ -138,11 +148,13 @@ void ofAddon::addReplaceStringVector(vector<string> & variable, string value, st
             if(regEX.match(values[i],match)){
                 string varName = values[i].substr(match.offset,match.length);
                 string varValue;
-                if(getenv(varName.c_str())){
+				if(varName == "OF_ROOT"){
+					varValue = pathToOF;
+				}else if(getenv(varName.c_str())){
                     varValue = getenv(varName.c_str());
                 }
-                ofStringReplace(values[i],"$("+varName+")",varValue);
-                cout << varName << endl << values[i] << endl;
+				ofStringReplace(values[i],"$("+varName+")",varValue);
+				ofLogVerbose("ofAddon") << "addon config: substituting " << varName << " with " << varValue << " = " << values[i] << endl;
             }
 
 			if(prefix=="" || values[i].find(pathToOF)==0 || ofFilePath::isAbsolute(values[i])) variable.push_back(values[i]);
@@ -168,11 +180,13 @@ void ofAddon::addReplaceStringVector(vector<LibraryBinary> & variable, string va
 			if (regEX.match(values[i], match)) {
 				string varName = values[i].substr(match.offset, match.length);
 				string varValue;
-				if (getenv(varName.c_str())) {
+				if(varName == "OF_ROOT"){
+					varValue = pathToOF;
+				}else if (getenv(varName.c_str())) {
 					varValue = getenv(varName.c_str());
 				}
 				ofStringReplace(values[i], "$(" + varName + ")", varValue);
-				cout << varName << endl << values[i] << endl;
+				ofLogVerbose("ofAddon") << "addon config: substituting " << varName << " with " << varValue << " = " << values[i];
 			}
 
 			if (prefix == "" || values[i].find(pathToOF) == 0 || ofFilePath::isAbsolute(values[i])) {
@@ -290,6 +304,10 @@ void ofAddon::parseVariableValue(string variable, string value, bool addToValue,
 	if(variable == "ADDON_INCLUDES_EXCLUDE"){
 		addReplaceStringVector(excludeIncludes,value,"",addToValue);
 	}
+
+	if (variable == "ADDON_DEFINES") {
+		addReplaceStringVector(defines, value, "", addToValue);
+	}
 }
 
 void ofAddon::exclude(vector<string> & variables, vector<string> exclusions){
@@ -395,6 +413,11 @@ void ofAddon::parseConfig(){
 	exclude(objcsrcFiles,excludeSources);
 	exclude(headersrcFiles,excludeSources);
 	exclude(libs,excludeLibs);
+
+	ofLogVerbose("ofAddon") << "libs after exclusions " << libs.size();
+	for(auto & lib: libs){
+		ofLogVerbose("ofAddon") << lib.path;
+	}
 }
 
 void ofAddon::fromFS(string path, string platform){
@@ -447,8 +470,11 @@ void ofAddon::fromFS(string path, string platform){
 
         if (platform == "osx" || platform == "ios"){
             getFrameworksRecursively(libsPath, frameworks, platform);
-
         }
+
+		if(platform == "vs" || platform == "msys2"){
+			getDllsRecursively(libsPath, dllsToCopy, platform);
+		}
 
     }
     
