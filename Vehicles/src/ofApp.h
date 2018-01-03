@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include <vector>
 #include "Specimen.cpp"
 
 class ofApp : public ofBaseApp{
@@ -21,6 +22,4 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-	
-		Specimen ind;
 };

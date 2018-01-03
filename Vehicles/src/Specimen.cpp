@@ -10,14 +10,18 @@
 class Specimen {
 private:
 	ofVec2f location;
-	float speed = 0.0;
+	ofVec2f velocity;
+	ofVec2f acceleration;
+	
 	int height = 20;
 	int width = 10;
 	float rotation = 0.0;
+	
 	ofPath coord;
 	ofVec2f target;
-	ofVec2f velocity;
-	constexpr static const float maxSteering = 5.0;
+	
+	constexpr static float maxForce = 0.2;
+	constexpr static float maxSpeed = 5.0;
 	
 	void updateCoordinates() {
 		coord.clear();
@@ -29,70 +33,100 @@ private:
 	
 public:
 	Specimen() {
-		location = ofVec2f(0,0);
+		acceleration = ofVec2f(0, 0);
+		velocity = ofVec2f(0, -2);
+		location = ofVec2f(0, 0);
 		updateCoordinates();
 	}
 	
 	Specimen(int x, int y) {
+		acceleration = ofVec2f(0, 0);
+		velocity = ofVec2f(0, -2);
 		location = ofVec2f(x, y);
 		updateCoordinates();
 	}
 	
-	Specimen(const ofVec2f &location) {
-		this->location = location;
-		updateCoordinates();
+	void applyForce(const ofVec2f &force) {
+		acceleration += force;
 	}
 	
-	void setSpeed(float velocity) {
-		this->speed = velocity;
+	void applyBehaviors(vector<Specimen> &population) {
+		// Calculate forces
+		ofVec2f separateForce = separateFrom(population);
+		ofVec2f seekForce = seek(ofVec2f(ofGetMouseX(), ofGetMouseY()));
+		
+		// Apply genome
+		separateForce *= 2;
+		seekForce *= 1;
+		
+		// Apply
+		applyForce(separateForce);
+		applyForce(seekForce);
 	}
 	
-	void rotateLeft() {
-		rotation -= speed;
+	ofVec2f separateFrom(vector<Specimen> &population) {
+		float range = 40;
+		ofVec2f steeringForce = {0, 0};
+		ofVec2f sum = {0, 0};
+		int count = 0;
+		
+		// Get the sum of the desired separate direction
+		for (auto& other : population) {
+			float distance = location.distance(other.location);
+			if (distance > 0 and distance < range) {
+				ofVec2f desired = location - other.location;
+				
+				// Shorter distances apply more force
+				desired = desired.getNormalized() / distance;
+				
+				sum += desired;
+				count++;
+			}
+		}
+		
+		if (count > 0) {
+			// We want the average of the desired separation
+			sum /= count;
+			
+			// This is desired, so we normalize
+			sum = sum.getNormalized() * maxSpeed;
+			
+			// Apply Reynolds --> steering = desired - velocity
+			steeringForce = sum - velocity;
+			steeringForce.limit(maxForce);
+		}
+		
+		return steeringForce;
 	}
 	
-	void rotateRight() {
-		rotation += speed;
-	}
-	
-	void increaseSpeed() {
-		speed++;
-	}
-	
-	void decreaseSpeed() {
-		speed--;
-	}
-	
-	void draw() {
-		ofPushMatrix();
-		ofTranslate(location.x,location.y, 0);
-		ofRotateZ(rotation);
-		coord.draw();
-		ofPopMatrix();
-	}
-	
-	void setTarget(int x, int y) {
-		target = ofVec2f(x, y);
-	}
-	
-	void setVelocity() {
-		velocity = ofVec2f(speed * sin(ofDegToRad(rotation)), -speed * cos(ofDegToRad(rotation)));
+	ofVec2f seek(const ofVec2f &target) {
+		// Points from position to target
+		ofVec2f desired = target - location;
+		
+		// Reduce if it has arrived
+		float m = ofMap(desired.length(), 0, 100, 0, maxSpeed);
+		desired = desired.getNormalized() * m;
+		
+		// Apply Reynolds --> steering = desired - velocity
+		ofVec2f steeringForce = desired - velocity;
+		steeringForce.limit(maxForce);
+		
+		return steeringForce;
 	}
 	
 	void update() {
-		// Update target
-		setTarget(ofGetMouseX(), ofGetMouseY());
-		setVelocity();
+		// Update velocity
+		velocity += acceleration;
 		
-		// Calculate desire velocity
-		ofVec2f desired = target - location;
+		// Limit speed
+		velocity.limit(maxSpeed);
 		
-		// Calculate steering force
-		ofVec2f steeringForce = desired - velocity;
-		steeringForce.limit(maxSteering);
+		// Update location
+		location += velocity;
 		
-		// Update
-		location += steeringForce;
+		// reset
+		acceleration.set(0, 0);
+		
 		
 		// Constrain
 		if (location.x < 0) {
@@ -107,5 +141,14 @@ public:
 		if (location.y > ofGetHeight()) {
 			location.y = ofGetHeight();
 		}
+	}
+	
+	void draw() {
+		rotation = -velocity.angle(ofVec2f(0,-1));
+		ofPushMatrix();
+		ofTranslate(location.x,location.y, 0);
+		ofRotateZ(rotation);
+		coord.draw();
+		ofPopMatrix();
 	}
 };
