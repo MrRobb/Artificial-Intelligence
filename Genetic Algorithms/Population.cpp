@@ -17,7 +17,7 @@ private:
 	int generation;
 	bool finished;
 	int perfectScore;
-	
+
 public:
 	// construct
 	Population(string target, float mutationRate, int N_ind, int generation) {
@@ -33,18 +33,18 @@ public:
 		this->generation = generation;
 		perfectScore = 1;
 	}
-	
+
 	// call fitness for every specimen
 	void calculateFitness() {
 		for (int i = 0; i < population.size(); i++) {
 			population[i].fitness(target);
 		}
 	}
-	
+
 	// reproduce
 	void naturalSelection() {
 		float maxFitness = getBest().getFitness();
-		
+
 		for (int i = 0; i < population.size(); i++) {
 			float relative_fitness = population[i].getFitness() / maxFitness;
 			int percentage = int(relative_fitness * 100);
@@ -53,7 +53,7 @@ public:
 			}
 		}
 	}
-	
+
 	// create new generation
 	Population generate() {
 		Population p (target, mutationRate, int(population.size()), generation + 1);
@@ -67,10 +67,11 @@ public:
 				child.mutate(mutationRate);
 				p.population[i] = child;
 			}
+			pool = vector<DNA>();
 		}
 		return p;
 	}
-	
+
 	// most fit
 	DNA getBest() {
 		float record = 0.0;
@@ -83,17 +84,17 @@ public:
 		}
 		return population[index];
 	}
-	
+
 	// finished
 	bool isFinished() {
 		finished = (getBest().getFitness() == perfectScore);
 		return finished;
 	}
-	
+
 	int getGenerations() {
 		return generation;
 	}
-	
+
 	float getAverage() {
 		float total = 0.0;
 		for (int i = 0; i < population.size(); i++) {
@@ -101,7 +102,7 @@ public:
 		}
 		return total / (float) population.size();
 	}
-	
+
 	string allPhrases() {
 		string all = "";
 		for (int i = 0; i < population.size(); i++) {
