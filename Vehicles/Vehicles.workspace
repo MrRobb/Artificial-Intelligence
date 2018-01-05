@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<CodeBlocks_workspace_file>
-	<Workspace title="Vehicles">
-		<Project filename="Vehicles.cbp" active="1">
-			<Depends filename="../openFrameworks/libs/openFrameworksCompiled/project/linux/libopenFrameworks.cbp" />
-		</Project>
-		<Project filename="../openFrameworks/libs/openFrameworksCompiled/project/linux/libopenFrameworks.cbp" />
-	</Workspace>
-</CodeBlocks_workspace_file>
