@@ -4,6 +4,6 @@
 
 You can download compiled binaries here:
 
-- [Mac](https://github.com/MrRobb/Artificial-Intelligence/releases/download/master/Vehicles.app.zip)
+- [Mac](https://github.com/MrRobb/Artificial-Intelligence/releases/download/vehicles/Vehicles.app.zip)
 - Windows
 - Ubuntu
