@@ -9,25 +9,25 @@ You can specify:
 
 [![asciicast](https://asciinema.org/a/C1CjS24P29LjcFICCaNlbsB9j.png)](https://asciinema.org/a/C1CjS24P29LjcFICCaNlbsB9j)
 
-### How to build
+#### How to build
 
 ```sh
 make build
 ```
 
-### How to run
+#### How to run
 
 ```sh
 make run
 ```
 
-### How to clean
+#### How to clean
 
 ```sh
 make clean
 ```
 
-### Any question
+#### Any question
 
 ```sh
 make help
