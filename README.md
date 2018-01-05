@@ -1,29 +1,18 @@
 # Artificial-Intelligence
 
-### How to build
+Every project has its own README.md with their compiling, running, downloading information.
 
-```sh
-# In a directory with a Makefile
-make build
-```
+So, what are you waiting for? Chose one folder!
 
-### How to run
+### Pull requests are always welcome
 
-```sh
-# In a directory with a Makefile
-make run
-```
+We are always thrilled to receive pull requests, and do our best to
+process them as fast as possible. Not sure if that typo is worth a pull
+request? Do it! We will appreciate it.
 
-### How to clean
+If your pull request is not accepted on the first try, don't be
+discouraged! If there's a problem with the implementation, hopefully you
+received feedback on what to improve.
 
-```sh
-# In a directory with a Makefile
-make clean
-```
 
-### Any question
-
-```sh
-# In a directory with a Makefile
-make help
-```
+**Do you want to contribute?** You can learn how from this *free* series [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
