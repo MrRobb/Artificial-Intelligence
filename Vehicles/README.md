@@ -8,5 +8,6 @@ This is an OpenFrameworks app ---> have to move the src, bin and other configs t
 You can download compiled binaries here:
 
 - [Mac](https://github.com/MrRobb/Artificial-Intelligence/releases/download/vehicles/Vehicles.app.zip)
-- Windows
+- [Windows 64 bits](https://github.com/MrRobb/Artificial-Intelligence/releases/download/vehicles/Vehicles.Windows.64.zip)
+- [Windows 32 bits](https://github.com/MrRobb/Artificial-Intelligence/releases/download/vehicles/Vehicles.Windows.32.zip)
 - [Ubuntu](https://github.com/MrRobb/Artificial-Intelligence/releases/download/vehicles/Vehicles.Ubuntu.16.04.16)
