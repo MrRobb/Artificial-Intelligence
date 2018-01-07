@@ -140,12 +140,16 @@ public:
 	
 	void rotate() {
 		rotateShape(CLOCKWISE);
-		for (int i = 0; i < width and in(0); i++) {
+		for (int i = 0; i < 4 and in(0); i++) {
 			if (not in(-1)) {
 				current.x--;
 			}
-			if (not in (1)) {
+			else if (not in (1)) {
 				current.x++;
+			}
+			else {
+				rotateShape(COUNTERCLOCKWISE);
+				return;
 			}
 		}
 	}
