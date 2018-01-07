@@ -72,9 +72,6 @@ class Tetris {
 	
 	void init_colors() {
 		colors[I] = "F92338";
-		colors[I] = "F92338";
-		colors[I] = "F92338";
-		colors[I] = "F92338";
 		colors[J] = "C973FF";
 		colors[L] = "1C76BC";
 		colors[O] = "FEE356";
@@ -180,6 +177,13 @@ public:
 		this->y = h / 2 - blockSize * height/2;
 	}
 	
+	void gameOver(ofTrueTypeFont &myFont) {
+		ofBackgroundHex(ofHexToInt("0D1B1E"));
+		ofSetColor(255, 255, 255);
+		string s = "Score: " + to_string(score);
+		myFont.drawString(s, ofGetWidth()/2 - 150, ofGetHeight()/2);
+	}
+	
 	void reset() {
 		score = 0;
 		
@@ -200,11 +204,12 @@ public:
 		myFont.drawString(s, x - 300, y + blockSize);
 	}
 	
-	void draw() {
+	void draw(ofTrueTypeFont &myFont, bool &gameOver) {
 		// Game over
 		for (int j = 0; j < width; j++) {
 			if (grid[1][j]) {
-				reset();
+				gameOver = true;
+				return;
 			}
 		}
 		

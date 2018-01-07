@@ -7,6 +7,7 @@ Tetris game;
 float counter = 0;
 bool finishRotation = true;
 bool isPaused = false;
+bool gameOver = false;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -15,7 +16,7 @@ void ofApp::setup(){
 	ofSetFrameRate(speed * 60);
 	ofSetBackgroundColorHex(ofHexToInt("0D1B1E"));
 	ofDisableDataPath();
-	myFont.load("data/myfont.otf", 36);
+	myFont.load("data/myfont.otf", min(ofGetHeight(), ofGetWidth()) / 38);
 	
 	// Initialize
 	game = Tetris();
@@ -32,39 +33,43 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	ofSetColor(255, 255, 255);
-	if (not isPaused) {
-		game.drawScore(myFont);
-		game.draw();
-	}
-	else {
+	if (isPaused) {
 		myFont.drawString("PAUSED", ofGetWidth()/2 - 85, ofGetHeight()/2);
 	}
+	else if (gameOver) {
+		game.gameOver(myFont);
+	}
+	else {
+		game.drawScore(myFont);
+		game.draw(myFont, gameOver);
+	}
+	
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	switch (key) {
 		case OF_KEY_DOWN:
-			if (not isPaused) {
+			if (not isPaused and not gameOver) {
 				speed = 3.0;
 				ofSetFrameRate(speed * 60);
 			}
 			break;
 			
 		case OF_KEY_RIGHT:
-			if (not isPaused) {
+			if (not isPaused and not gameOver) {
 				game.moveRight();
 			}
 			break;
 			
 		case OF_KEY_LEFT:
-			if (not isPaused) {
+			if (not isPaused and not gameOver) {
 				game.moveLeft();
 			}
 			break;
 			
 		case OF_KEY_UP:
-			if (not isPaused) {
+			if (not isPaused and not gameOver) {
 				if (finishRotation) {
 					game.rotate();
 					finishRotation = false;
@@ -73,13 +78,19 @@ void ofApp::keyPressed(int key){
 			break;
 			
 		case OF_KEY_RETURN:
-			if (not isPaused) {
+			if (not isPaused and not gameOver) {
 				game.reset();
 			}
 			break;
 			
 		case ' ':
-			isPaused = not isPaused;
+			if (gameOver) {
+				gameOver = false;
+				game.reset();
+			}
+			else {
+				isPaused = not isPaused;
+			}
 			break;
 			
 		default:
@@ -137,6 +148,7 @@ void ofApp::mouseExited(int x, int y){
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
 	game.realloc(h,w);
+	myFont.load("data/myfont.otf", min(w, h) / 38);
 }
 
 //--------------------------------------------------------------
