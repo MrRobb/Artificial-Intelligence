@@ -6,6 +6,7 @@ int timeFrame = 0;
 Tetris game;
 float counter = 0;
 bool finishRotation = true;
+bool isPaused = false;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -13,6 +14,8 @@ void ofApp::setup(){
 	ofSetVerticalSync(false);
 	ofSetFrameRate(speed * 60);
 	ofSetBackgroundColorHex(ofHexToInt("0D1B1E"));
+	ofDisableDataPath();
+	myFont.load("data/myfont.otf", 36);
 	
 	// Initialize
 	game = Tetris();
@@ -20,40 +23,64 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	if (ofGetFrameNum() % int(20/speed) == 0)
-		game.update();
+	if (not isPaused) {
+		if (ofGetFrameNum() % int(20/speed) == 0)
+			game.update();
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	game.draw();
+	ofSetColor(255, 255, 255);
+	if (not isPaused) {
+		game.drawScore(myFont);
+		game.draw();
+	}
+	else {
+		myFont.drawString("PAUSED", ofGetWidth()/2 - 85, ofGetHeight()/2);
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	switch (key) {
 		case OF_KEY_DOWN:
-			speed = 3.0;
-			ofSetFrameRate(speed * 60);
+			if (not isPaused) {
+				speed = 3.0;
+				ofSetFrameRate(speed * 60);
+			}
 			break;
 			
 		case OF_KEY_RIGHT:
-			game.moveRight();
+			if (not isPaused) {
+				game.moveRight();
+			}
 			break;
 			
 		case OF_KEY_LEFT:
-			game.moveLeft();
+			if (not isPaused) {
+				game.moveLeft();
+			}
 			break;
 			
 		case OF_KEY_UP:
-			if (finishRotation) {
-				game.rotate();
-				finishRotation = false;
+			if (not isPaused) {
+				if (finishRotation) {
+					game.rotate();
+					finishRotation = false;
+				}
+			}
+			break;
+			
+		case OF_KEY_RETURN:
+			if (not isPaused) {
+				game.reset();
 			}
 			break;
 			
 		case ' ':
-			game.reset();
+			isPaused = not isPaused;
+			break;
 			
 		default:
 			break;

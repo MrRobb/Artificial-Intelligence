@@ -181,6 +181,8 @@ public:
 	}
 	
 	void reset() {
+		score = 0;
+		
 		grid = vector< vector<unsigned char> > (height, vector<unsigned char> (width, 0));
 		
 		// Current Initialization
@@ -191,6 +193,11 @@ public:
 		next.y = 0;
 		next.shape = Blocks(int(rand() % 7) * 4);
 		next.x = 4;
+	}
+	
+	void drawScore(ofTrueTypeFont &myFont) {
+		string s = to_string(score);
+		myFont.drawString(s, x - 300, y + blockSize);
 	}
 	
 	void draw() {
@@ -225,6 +232,7 @@ public:
 		}
 		
 		// Blocks
+		unsigned char lines_cleared = 0;
 		for (int i = 0; i < height; i++) {
 			bool complete = true;
 			for (int j = 0; j < width; j++) {
@@ -237,6 +245,31 @@ public:
 				}
 			}
 			if (complete) {
+				// Update score
+				++lines_cleared;
+				switch (lines_cleared) {
+					case 1:
+						score += 40;
+						break;
+						
+					case 2:
+						score += 60;
+						break;
+						
+					case 3:
+						score += 200;
+						break;
+						
+					case 4:
+						score += 1000;
+						break;
+						
+					default:
+						reset();
+						break;
+				}
+				
+				// Clear
 				for (int k = i; k > 0; k--) {
 					for (int l = 0; l < width; l++) {
 						grid[k][l] = grid[k-1][l];
