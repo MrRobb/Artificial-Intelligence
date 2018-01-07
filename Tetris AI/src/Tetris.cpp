@@ -56,7 +56,7 @@ class Tetris {
 		shapes[S] = {{0,5,5}, {5,5,0}, {0,0,0}};
 		shapes[S+1] = {{0,5,0}, {0,5,5}, {0,0,5}};
 		shapes[S+2] = {{0,0,0}, {0,5,5}, {5,5,0}};
-		shapes[S+2] = {{5,0,0}, {5,5,0}, {5,0,0}};
+		shapes[S+3] = {{5,0,0}, {5,5,0}, {0,5,0}};
 		
 		shapes[T] = {{0,6,0}, {6,6,6}, {0,0,0}};
 		shapes[T+1] = {{0,6,0}, {0,6,6}, {0,6,0}};
@@ -168,6 +168,12 @@ public:
 		else {
 			current.y++;
 		}
+	}
+	
+	void realloc(int h, int w) {
+		this->blockSize = min(w, h) / 28;
+		this->x = w / 2 - blockSize * width/2;
+		this->y = h / 2 - blockSize * height/2;
 	}
 	
 	void reset() {
