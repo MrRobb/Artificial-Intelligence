@@ -46,7 +46,7 @@ class Tetris {
 		shapes[L] = {{0,0,3}, {3,3,3}, {0,0,0}};
 		shapes[L+1] = {{0,3,0}, {0,3,0}, {0,3,3}};
 		shapes[L+2] = {{0,0,0}, {3,3,3}, {3,0,0}};
-		shapes[L+3] = {{0,3,3}, {0,3,0}, {0,3,0}};
+		shapes[L+3] = {{3,3,0}, {0,3,0}, {0,3,0}};
 		
 		shapes[O] = {{4,4}, {4,4}};
 		shapes[O+1] = {{4,4}, {4,4}};
@@ -83,8 +83,8 @@ class Tetris {
 		colors[Z] = "F8931D";
 	}
 	
-	void rotateShape(Shape &s, bool clockwise) {
-		s.shape = Blocks((s.shape - s.shape % 4) + ((s.shape + (clockwise ? 1 : -1)) % 4));
+	void rotateShape(bool clockwise) {
+		current.shape = Blocks((current.shape - (current.shape % 4)) + ((current.shape + (clockwise ? 1 : -1)) % 4));
 	}
 	
 public:
@@ -118,7 +118,7 @@ public:
 	bool in (int offset) {
 		for (int i = 0; i < shapes[current.shape].size(); i++) {
 			for (int j = 0; j < shapes[current.shape][i].size(); j++) {
-				if (shapes[current.shape][i][j] and grid[current.y + i][current.x + j + offset]) {
+				if (shapes[current.shape][i][j] and (current.x + j + offset < 0 or current.x + j + offset >= width or grid[current.y + i][current.x + j + offset])) {
 					return true;
 				}
 			}
@@ -127,19 +127,27 @@ public:
 	}
 	
 	void moveLeft() {
-		if (current.x > 0 and not in(-1)) {
+		if (not in(-1)) {
 			current.x--;
 		}
 	}
 	
 	void moveRight() {
-		if (current.x < int(10 - shapes[current.shape].size()) and not in(1)) {
+		if (not in(1)) {
 			current.x++;
 		}
 	}
 	
 	void rotate() {
-		rotateShape(current, CLOCKWISE);
+		rotateShape(CLOCKWISE);
+		for (int i = 0; i < width and in(0); i++) {
+			if (not in(-1)) {
+				current.x--;
+			}
+			if (not in (1)) {
+				current.x++;
+			}
+		}
 	}
 	
 	void update() {
@@ -176,6 +184,13 @@ public:
 	}
 	
 	void draw() {
+		// Game over
+		for (int j = 0; j < width; j++) {
+			if (grid[1][j]) {
+				reset();
+			}
+		}
+		
 		// Boundaries
 		for (int i = -1; i < height + 1; i++) {
 			for (int j = -1; j < width + 1; j++) {
@@ -194,6 +209,9 @@ public:
 		ofSetHexColor(ofHexToInt("394446"));
 		for (int i = 0; i < width; i++) {
 			ofDrawLine(x + i * blockSize, y, x + i * blockSize, y + height * blockSize);
+		}
+		for (int i = 0; i < height; i++) {
+			ofDrawLine(x, y + i * blockSize, x + width * blockSize, y + i * blockSize);
 		}
 		
 		// Blocks
@@ -218,7 +236,7 @@ public:
 		}
 		
 		// Current
-		ofSetHexColor(ofHexToInt(colors[current.shape - current.shape % 4]));
+		ofSetHexColor(ofHexToInt(colors[current.shape - (current.shape % 4)]));
 		for (int i = 0; i < shapes[current.shape].size(); i++) {
 			for (int j = 0; j < shapes[current.shape][i].size(); j++) {
 				if (shapes[current.shape][i][j]) {
