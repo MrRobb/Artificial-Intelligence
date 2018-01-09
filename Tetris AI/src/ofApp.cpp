@@ -8,6 +8,7 @@ float counter = 0;
 bool finishRotation = true;
 bool isPaused = false;
 bool gameOver = false;
+int score = 0;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -24,7 +25,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	if (not isPaused) {
+	if (not isPaused and not gameOver) {
 		if (ofGetFrameNum() % int(20/speed) == 0)
 			game.update();
 	}
@@ -37,10 +38,13 @@ void ofApp::draw(){
 		myFont.drawString("PAUSED", ofGetWidth()/2 - 85, ofGetHeight()/2);
 	}
 	else if (gameOver) {
-		game.gameOver(myFont);
+		// game.gameOver(myFont);
+		cerr << score << endl;
+		gameOver = false;
+		game.reset();
 	}
 	else {
-		game.drawScore(myFont);
+		score = game.drawScore(myFont);
 		game.draw(myFont, gameOver);
 	}
 	
@@ -92,7 +96,15 @@ void ofApp::keyPressed(int key){
 				isPaused = not isPaused;
 			}
 			break;
+		
+		case 'm':
+			speed = 20.0;
+			ofSetFrameRate(speed * 60);
+			break;
 			
+		case 'n':
+			speed = 1.0;
+			ofSetFrameRate(speed * 60);
 		default:
 			break;
 	}

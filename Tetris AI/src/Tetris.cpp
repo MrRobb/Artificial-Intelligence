@@ -6,16 +6,9 @@
 //
 
 #include "Tetris.hpp"
+#include "AI.hpp"
 
 class Tetris {
-	// Data Structures
-	enum Blocks {I=0,J=4,L=8,O=12,S=16,T=20,Z=24};
-	struct Shape {
-		int x;
-		int y;
-		Blocks shape;
-	};
-	
 	// Content
 	vector< vector<unsigned char> > grid;
 	map<int,vector< vector<unsigned char> > > shapes;
@@ -30,6 +23,8 @@ class Tetris {
 	int blockSize = 50;
 	int x = 1400 / 2 - blockSize * width/2;
 	int y = 1400 / 2 - blockSize * height/2;
+	
+	Shape the_one;
 	
 	// Functions
 	void init_shapes() {
@@ -165,6 +160,22 @@ public:
 			next.shape = Blocks(int(rand() % 7) * 4);
 			next.y = 0;
 			next.x = 4;
+			
+			// Create AI
+			AI bot = AI(grid, shapes);
+			the_one = bot.getBest(current, grid);
+			
+			// Place best move
+			int j = 0;
+			
+			for (int i = 0; i < (the_one.shape % 4); i++)
+				rotate();
+			while (the_one.x > current.x and j++ < 1000) {
+				moveRight();
+			}
+			while (the_one.x < current.x and j++ < 1000) {
+				moveLeft();
+			}
 		}
 		else {
 			current.y++;
@@ -199,9 +210,10 @@ public:
 		next.x = 4;
 	}
 	
-	void drawScore(ofTrueTypeFont &myFont) {
+	int drawScore(ofTrueTypeFont &myFont) {
 		string s = to_string(score);
 		myFont.drawString(s, x - 300, y + blockSize);
+		return this->score;
 	}
 	
 	void draw(ofTrueTypeFont &myFont, bool &gameOver) {
@@ -303,6 +315,16 @@ public:
 					}
 				}
 				ofDrawRectangle(x + (width+3) * blockSize + j * blockSize, y + i * blockSize, blockSize, blockSize);
+			}
+		}
+		
+		// AI
+		ofSetHexColor(ofHexToInt("FFFFFF"));
+		for (int i = 0; i < shapes[the_one.shape].size(); i++) {
+			for (int j = 0; j < shapes[the_one.shape][i].size(); j++) {
+				if (shapes[the_one.shape][i][j]) {
+					ofDrawRectangle(x + the_one.x * blockSize + j * blockSize, y + the_one.y * blockSize + i * blockSize, blockSize, blockSize);
+				}
 			}
 		}
 	}
