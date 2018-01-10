@@ -119,10 +119,10 @@
 			isa = PBXGroup;
 			children = (
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
-				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				7F9FD86A2001374C0086F028 /* Tetris.cpp */,
+				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				7F9FD86B2001374C0086F028 /* Tetris.hpp */,
+				7F9FD86A2001374C0086F028 /* Tetris.cpp */,
 				7F94B50D20051321007FB811 /* AI.hpp */,
 				7F94B50C20051321007FB811 /* AI.cpp */,
 			);

@@ -1,5 +1,4 @@
 #include "ofApp.h"
-#include "Tetris.cpp"
 
 float speed = 1.0;
 int timeFrame = 0;

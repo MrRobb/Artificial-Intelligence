@@ -9,7 +9,21 @@
 #define AI_hpp
 
 #include <stdio.h>
-#include "Tetris.hpp"
+#include <vector>
+#include <map>
+
+using namespace std;
+
+#define CLOCKWISE true
+#define COUNTERCLOCKWISE false
+
+// Data Structures
+enum Blocks {I=0,J=4,L=8,O=12,S=16,T=20,Z=24};
+struct Shape {
+	int x;
+	int y;
+	Blocks shape;
+};
 
 class AI {
 	float aggregate_height = -3.78;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Tetris.hpp"
 
 class ofApp : public ofBaseApp{
 
