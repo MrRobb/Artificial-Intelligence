@@ -1,95 +1,96 @@
 #include "ofApp.h"
 
-float speed = 1.0;
-int timeFrame = 0;
-Tetris game;
-float counter = 0;
-bool finishRotation = true;
-bool isPaused = false;
-bool gameOver = false;
-int score = 0;
-
 //--------------------------------------------------------------
 void ofApp::setup(){
 	// Config
+	games = vector<Tetris> (n);
+	scores = vector<int> (n, 0);
+	gameOvers = vector<bool> (n, false);
 	ofSetVerticalSync(false);
-	ofSetFrameRate(speed * 60);
+	ofSetFrameRate(60);
 	ofSetBackgroundColorHex(ofHexToInt("0D1B1E"));
 	ofDisableDataPath();
 	myFont.load("data/myfont.otf", min(ofGetHeight(), ofGetWidth()) / 38);
 	
 	// Initialize
-	game = Tetris();
+	for (int i = 0; i < n; i++) {
+		games[i] = Tetris (ofGetWidth()/n * i, ofGetWidth()/n * (i+1), 0, ofGetHeight(), (i < ai));
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	if (not isPaused and not gameOver) {
-		if (ofGetFrameNum() % int(20/speed) == 0)
-			game.update();
+	if (not isPaused) {
+		for (int i = 0; i < n; i++) {
+			if (not gameOvers[i] and ofGetFrameNum() % int(20/speed) == 0) {
+				games[i].update();
+			}
+		}
 	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofSetColor(255, 255, 255);
 	if (isPaused) {
 		myFont.drawString("PAUSED", ofGetWidth()/2 - 85, ofGetHeight()/2);
 	}
-	else if (gameOver) {
-		// game.gameOver(myFont);
-		cerr << score << endl;
-		gameOver = false;
-		game.reset();
-	}
 	else {
-		score = game.drawScore(myFont);
-		game.draw(myFont, gameOver);
+		for (int i = 0; i < n; i++) {
+			ofSetColor(255, 255, 255);
+			if (gameOvers[i]) {
+				games[i].gameOver(myFont);
+		//		cerr << "Player: " << score << endl;
+		//		gameOver = false;
+		//		games[0].reset();
+			}
+			else {
+				scores[i] = games[i].drawScore(myFont);
+				gameOvers[i] = games[i].draw(myFont);
+			}
+		}
 	}
-	
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	switch (key) {
 		case OF_KEY_DOWN:
-			if (not isPaused and not gameOver) {
+			if (not isPaused and not gameOvers[n-1]) {
 				speed = 3.0;
-				ofSetFrameRate(speed * 60);
 			}
 			break;
 			
 		case OF_KEY_RIGHT:
-			if (not isPaused and not gameOver) {
-				game.moveRight();
+			if (not isPaused and not gameOvers[n-1]) {
+				games[n-1].moveRight();
 			}
 			break;
 			
 		case OF_KEY_LEFT:
-			if (not isPaused and not gameOver) {
-				game.moveLeft();
+			if (not isPaused and not gameOvers[n-1]) {
+				games[n-1].moveLeft();
 			}
 			break;
 			
 		case OF_KEY_UP:
-			if (not isPaused and not gameOver) {
+			if (not isPaused and not gameOvers[n-1]) {
 				if (finishRotation) {
-					game.rotate();
+					games[n-1].rotate();
 					finishRotation = false;
 				}
 			}
 			break;
 			
 		case OF_KEY_RETURN:
-			if (not isPaused and not gameOver) {
-				game.reset();
+			if (not isPaused and not gameOvers[n-1]) {
+				games[n-1].reset();
 			}
 			break;
 			
 		case ' ':
-			if (gameOver) {
-				gameOver = false;
-				game.reset();
+			if (gameOvers[n-1]) {
+				gameOvers[n-1] = false;
+				games[n-1].reset();
 			}
 			else {
 				isPaused = not isPaused;
@@ -158,7 +159,9 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
-	game.realloc(h,w);
+	for (int i = 0; i < n; i++) {
+		games[i].realloc(w/n * i, w/n * (i+1), 0, h);
+	}
 	myFont.load("data/myfont.otf", min(w, h) / 38);
 }
 

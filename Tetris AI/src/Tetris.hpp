@@ -13,7 +13,7 @@
 #include <map>
 #include <string>
 
-#include "ofApp.h"
+#include "ofMain.h"
 #include "AI.hpp"
 
 #define CLOCKWISE true
@@ -29,16 +29,20 @@ private:
 	map<int,string> colors;
 	Shape current;
 	Shape next;
+	Shape the_one;
 	
 	// Parameters
 	int height = 20;
 	int width = 10;
 	int score = 0;
 	int blockSize = 50;
-	int x = 1400 / 2 - blockSize * width/2;
-	int y = 1400 / 2 - blockSize * height/2;
-	
-	Shape the_one;
+	int w1;
+	int w2;
+	int h1;
+	int h2;
+	int x;
+	int y;
+	bool withAI = true;
 	
 	// Functions
 	void init_shapes();
@@ -49,6 +53,8 @@ private:
 	
 public:
 	Tetris();
+	
+	Tetris(int w1, int w2, int h1, int h2, bool withAI);
 	
 	bool ground();
 	
@@ -62,7 +68,9 @@ public:
 	
 	void update();
 	
-	void realloc(int h, int w);
+	void realloc(int w1, int w2, int h1, int h2);
+	
+	void toggleAI();
 	
 	void gameOver(ofTrueTypeFont &myFont);
 	
@@ -70,7 +78,7 @@ public:
 	
 	int drawScore(ofTrueTypeFont &myFont);
 	
-	void draw(ofTrueTypeFont &myFont, bool &gameOver);
+	bool draw(ofTrueTypeFont &myFont);
 };
 
 #endif /* Tetris_hpp */

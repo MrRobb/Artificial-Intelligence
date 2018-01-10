@@ -60,7 +60,17 @@ void Tetris::rotateShape(bool clockwise) {
 }
 
 Tetris::Tetris() {
+	
+}
+
+Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI) {
 	// Initialize
+	this->blockSize = min(w2 - w1, h2 - h1) / 28;
+	this->x = w1 + (w2 - w1) / 2 - blockSize * width/2;
+	this->y = h1 + (h2 - h1) / 2 - blockSize * height/2;
+	this->withAI = withAI;
+	this->w1 = w1; this->w2 = w2;
+	this->h1 = h1; this->h2 = h2;
 	grid = vector< vector<unsigned char> > (height, vector<unsigned char> (width, 0));
 	init_shapes();
 	init_colors();
@@ -73,6 +83,24 @@ Tetris::Tetris() {
 	next.x = 4;
 	next.y = 0;
 	next.shape = Blocks(int(rand() % 7) * 4);
+	
+	// Create AI
+	if (withAI) {
+		AI bot = AI(grid, shapes);
+		the_one = bot.getBest(current, grid);
+		
+		// Place best move
+		int j = 0;
+		
+		for (int i = 0; i < (the_one.shape % 4); i++)
+			rotate();
+		while (the_one.x > current.x and j++ < 1000) {
+			moveRight();
+		}
+		while (the_one.x < current.x and j++ < 1000) {
+			moveLeft();
+		}
+	}
 }
 
 bool Tetris::ground() {
@@ -141,19 +169,21 @@ void Tetris::update() {
 		next.x = 4;
 		
 		// Create AI
-		AI bot = AI(grid, shapes);
-		the_one = bot.getBest(current, grid);
+		if (withAI) {
+			AI bot = AI(grid, shapes);
+			the_one = bot.getBest(current, grid);
 		
-		// Place best move
-		int j = 0;
-		
-		for (int i = 0; i < (the_one.shape % 4); i++)
-			rotate();
-		while (the_one.x > current.x and j++ < 1000) {
-			moveRight();
-		}
-		while (the_one.x < current.x and j++ < 1000) {
-			moveLeft();
+			// Place best move
+			int j = 0;
+			
+			for (int i = 0; i < (the_one.shape % 4); i++)
+				rotate();
+			while (the_one.x > current.x and j++ < 1000) {
+				moveRight();
+			}
+			while (the_one.x < current.x and j++ < 1000) {
+				moveLeft();
+			}
 		}
 	}
 	else {
@@ -161,17 +191,24 @@ void Tetris::update() {
 	}
 }
 
-void Tetris::realloc(int h, int w) {
-	this->blockSize = min(w, h) / 28;
-	this->x = w / 2 - blockSize * width/2;
-	this->y = h / 2 - blockSize * height/2;
+void Tetris::realloc(int w1, int w2, int h1, int h2) {
+	this->w1 = w1; this->w2 = w2;
+	this->h1 = h1; this->h2 = h2;
+	this->blockSize = min(w2 - w1, h2 - h1) / 28;
+	this->x = w1 + (w2 - w1) / 2 - blockSize * width/2;
+	this->y = h1 + (h2 - h1) / 2 - blockSize * height/2;
+}
+
+void Tetris::toggleAI() {
+	withAI = not withAI;
 }
 
 void Tetris::gameOver(ofTrueTypeFont &myFont) {
-	ofBackgroundHex(ofHexToInt("0D1B1E"));
+	ofSetHexColor(ofHexToInt("0D1B1E"));
+	ofDrawRectangle(w1, h1, (w2 - w1), (h2 - h1));
 	ofSetColor(255, 255, 255);
 	string s = "Score: " + to_string(score);
-	myFont.drawString(s, ofGetWidth()/2 - 150, ofGetHeight()/2);
+	myFont.drawString(s, w1 + (w2 - w1)/2 - blockSize * 3, h1 + (h2 - h1)/2);
 }
 
 void Tetris::reset() {
@@ -187,6 +224,24 @@ void Tetris::reset() {
 	next.y = 0;
 	next.shape = Blocks(int(rand() % 7) * 4);
 	next.x = 4;
+	
+	// Create AI
+	if (withAI) {
+		AI bot = AI(grid, shapes);
+		the_one = bot.getBest(current, grid);
+		
+		// Place best move
+		int j = 0;
+		
+		for (int i = 0; i < (the_one.shape % 4); i++)
+			rotate();
+		while (the_one.x > current.x and j++ < 1000) {
+			moveRight();
+		}
+		while (the_one.x < current.x and j++ < 1000) {
+			moveLeft();
+		}
+	}
 }
 
 int Tetris::drawScore(ofTrueTypeFont &myFont) {
@@ -195,12 +250,11 @@ int Tetris::drawScore(ofTrueTypeFont &myFont) {
 	return this->score;
 }
 
-void Tetris::draw(ofTrueTypeFont &myFont, bool &gameOver) {
+bool Tetris::draw(ofTrueTypeFont &myFont) {
 	// Game over
 	for (int j = 0; j < width; j++) {
 		if (grid[1][j]) {
-			gameOver = true;
-			return;
+			return true;
 		}
 	}
 	
@@ -243,6 +297,7 @@ void Tetris::draw(ofTrueTypeFont &myFont, bool &gameOver) {
 		if (complete) {
 			// Update score
 			++lines_cleared;
+			++the_one.y;
 			switch (lines_cleared) {
 				case 1:
 					score += 40;
@@ -298,12 +353,16 @@ void Tetris::draw(ofTrueTypeFont &myFont, bool &gameOver) {
 	}
 	
 	// AI
-	ofSetHexColor(ofHexToInt("FFFFFF"));
-	for (int i = 0; i < shapes[the_one.shape].size(); i++) {
-		for (int j = 0; j < shapes[the_one.shape][i].size(); j++) {
-			if (shapes[the_one.shape][i][j]) {
-				ofDrawRectangle(x + the_one.x * blockSize + j * blockSize, y + the_one.y * blockSize + i * blockSize, blockSize, blockSize);
+	if (withAI) {
+		ofSetHexColor(ofHexToInt("919798"));
+		for (int i = 0; i < shapes[the_one.shape].size(); i++) {
+			for (int j = 0; j < shapes[the_one.shape][i].size(); j++) {
+				if (shapes[the_one.shape][i][j]) {
+					ofDrawRectangle(x + the_one.x * blockSize + j * blockSize, y + the_one.y * blockSize + i * blockSize, blockSize, blockSize);
+				}
 			}
 		}
 	}
+	
+	return false;
 }
