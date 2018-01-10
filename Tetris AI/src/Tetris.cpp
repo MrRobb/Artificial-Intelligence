@@ -212,7 +212,7 @@ public:
 	
 	int drawScore(ofTrueTypeFont &myFont) {
 		string s = to_string(score);
-		myFont.drawString(s, x - 300, y + blockSize);
+		myFont.drawString(s, x - 5 * blockSize, y + blockSize);
 		return this->score;
 	}
 	
