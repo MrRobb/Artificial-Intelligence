@@ -15,6 +15,7 @@
 
 #include "ofMain.h"
 #include "AI.hpp"
+#include "DNA.hpp"
 
 #define CLOCKWISE true
 #define COUNTERCLOCKWISE false
@@ -43,6 +44,7 @@ private:
 	int x;
 	int y;
 	bool withAI = true;
+	AI bot;
 	
 	// Functions
 	void init_shapes();
@@ -54,7 +56,9 @@ private:
 public:
 	Tetris();
 	
-	Tetris(int w1, int w2, int h1, int h2, bool withAI);
+	Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna);
+	
+	void setDNA(float aggregate_height, float complete_lines, float holes, float bumpiness);
 	
 	bool ground();
 	

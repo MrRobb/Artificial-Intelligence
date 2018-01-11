@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "Tetris.hpp"
+#include "Population.hpp"
 
 class ofApp : public ofBaseApp{
 
@@ -31,7 +32,10 @@ public:
 	vector<bool> gameOvers;
 	bool withAI = true;
 	vector<int> scores;
-	int n = 2;
-	int ai = 2;
+	int n = 80;
+	int ai = 80;
+	int rowSize = 8;
+	int cols = ai / (rowSize+1) + 1;
 	ofTrueTypeFont myFont;
+	Population population;
 };

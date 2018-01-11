@@ -1,4 +1,7 @@
 #include "ofApp.h"
+#include "DNA.hpp"
+
+int dead = 0;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -12,9 +15,38 @@ void ofApp::setup(){
 	ofDisableDataPath();
 	myFont.load("data/myfont.otf", min(ofGetHeight(), ofGetWidth()) / 38);
 	
+	population = Population(4, 0.025, ai, 0);
+	for (auto dna : population.allValues()) {
+		for (auto value : dna) {
+			cerr << value << ' ';
+		}
+		cerr << endl;
+	}
+	
 	// Initialize
-	for (int i = 0; i < n; i++) {
-		games[i] = Tetris (ofGetWidth()/n * i, ofGetWidth()/n * (i+1), 0, ofGetHeight(), (i < ai));
+	if (ai == n) {
+		int w = ofGetWidth();
+		int h = ofGetHeight();
+		for (int i = 0; i < n; i++) {
+			int w1 = w/rowSize * (i % rowSize);
+			int w2 = w/rowSize * ((i % rowSize) + 1);
+			int h1 = h/cols * int(i/rowSize);
+			int h2 = h/cols * int(i/rowSize) + h/cols;
+			games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i]);
+		}
+	}
+	else {
+		int w = ofGetWidth()/2;
+		int h = ofGetHeight();
+		for (int i = 0; i < n-1; i++) {
+			int w1 = w/rowSize * (i % rowSize);
+			int w2 = w/rowSize * ((i % rowSize) + 1);
+			int h1 = h/cols * int(i/rowSize);
+			int h2 = h/cols * int(i/rowSize) + h/cols;
+			games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i]);
+		}
+		int i = n - 1;
+		games[i] = Tetris (w, w*2, 0, h, (i < ai), NULL);
 	}
 }
 
@@ -35,6 +67,34 @@ void ofApp::draw(){
 		myFont.drawString("PAUSED", ofGetWidth()/2 - 85, ofGetHeight()/2);
 	}
 	else {
+		if (dead == n and dead == ai) {
+			// Evolve
+			population.calculateFitness(scores);
+			vector<float> best = population[population.getBest()].getValues();
+			cerr << population.getAverage() << " ";
+			cerr << population.getGenerations() << " -> ";
+			
+			cerr << "Best:";
+			for (auto& value : best) {
+				cerr << ' ' << value;
+			}
+			cerr << endl;
+			population.naturalSelection();
+			Population aux = population.generate(4);
+			population = aux;
+			int w = ofGetWidth()/2;
+			int h = ofGetHeight();
+			for (int i = 0; i < n; i++) {
+				gameOvers[i] = not gameOvers[i];
+				games[i].reset();
+				int w1 = w/rowSize * (i % rowSize);
+				int w2 = w/rowSize * ((i % rowSize) + 1);
+				int h1 = h/cols * int(i/rowSize);
+				int h2 = h/cols * int(i/rowSize) + h/cols;
+				games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i]);
+			}
+			dead = 0;
+		}
 		for (int i = 0; i < n; i++) {
 			ofSetColor(255, 255, 255);
 			if (gameOvers[i]) {
@@ -46,6 +106,9 @@ void ofApp::draw(){
 			else {
 				scores[i] = games[i].drawScore(myFont);
 				gameOvers[i] = games[i].draw(myFont);
+				if (gameOvers[i] == true) {
+					++dead;
+				}
 			}
 		}
 	}
@@ -159,8 +222,9 @@ void ofApp::mouseExited(int x, int y){
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
+	// Initialize
 	for (int i = 0; i < n; i++) {
-		games[i].realloc(w/n * i, w/n * (i+1), 0, h);
+		games[i].realloc(w/rowSize * (i%rowSize), w/rowSize * ((i%rowSize) + 1), h/cols * int(i/rowSize), h/cols * int(i/rowSize) + h/cols);
 	}
 	myFont.load("data/myfont.otf", min(w, h) / 38);
 }

@@ -45,7 +45,13 @@ class AI {
 	bool moveDown(Shape &s);
 	
 public:
-	AI(vector< vector<unsigned char> > &grid, map<int,vector< vector<unsigned char> > > &shapes);
+	AI();
+	
+	AI(map<int,vector< vector<unsigned char> > > &shapes);
+	
+	void setGrid(vector< vector<unsigned char> > &grid);
+	
+	void setDNA(float aggregate_height, float complete_lines, float holes, float bumpiness);
 	
 	void place_piece(Shape &s);
 	
@@ -63,7 +69,7 @@ public:
 	
 	float score(Shape &s);
 	
-	Shape getBest(Shape s_inicial, vector< vector<unsigned char> > &grid);
+	Shape getBest(Shape s_inicial);
 };
 
 #endif /* AI_hpp */

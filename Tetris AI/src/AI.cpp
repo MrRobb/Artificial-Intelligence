@@ -52,9 +52,23 @@ bool AI::moveDown(Shape &s) {
 	else return false;
 }
 
-AI::AI(vector< vector<unsigned char> > &grid, map<int,vector< vector<unsigned char> > > &shapes) {
-	this->grid = grid;
+AI::AI() {
+	
+}
+
+AI::AI(map<int,vector< vector<unsigned char> > > &shapes) {
 	this->shapes = shapes;
+}
+
+void AI::setGrid(vector< vector<unsigned char> > &grid) {
+	this->grid = grid;
+}
+
+void AI::setDNA(float aggregate_height, float complete_lines, float holes, float bumpiness) {
+	this->aggregate_height = aggregate_height;
+	this->complete_lines = complete_lines;
+	this->holes = holes;
+	this->bumpiness = bumpiness;
 }
 
 void AI::place_piece(Shape &s) {
@@ -137,7 +151,7 @@ float AI::score(Shape &s)
 	return a+b+c+d;
 }
 
-Shape AI::getBest(Shape s_inicial, vector< vector<unsigned char> > &grid)
+Shape AI::getBest(Shape s_inicial)
 {
 	s_inicial.shape = Blocks(s_inicial.shape - s_inicial.shape % 4);
 	float bestScore;

@@ -63,17 +63,19 @@ Tetris::Tetris() {
 	
 }
 
-Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI) {
+Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna) {
 	// Initialize
 	this->blockSize = min(w2 - w1, h2 - h1) / 28;
 	this->x = w1 + (w2 - w1) / 2 - blockSize * width/2;
 	this->y = h1 + (h2 - h1) / 2 - blockSize * height/2;
-	this->withAI = withAI;
 	this->w1 = w1; this->w2 = w2;
 	this->h1 = h1; this->h2 = h2;
 	grid = vector< vector<unsigned char> > (height, vector<unsigned char> (width, 0));
 	init_shapes();
 	init_colors();
+	this->withAI = withAI;
+	this->bot = AI(shapes);
+	bot.setDNA(dna[0], dna[1], dna[2], dna[3]);
 	
 	// Current Initialization
 	current.x = 4;
@@ -86,8 +88,8 @@ Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI) {
 	
 	// Create AI
 	if (withAI) {
-		AI bot = AI(grid, shapes);
-		the_one = bot.getBest(current, grid);
+		this->bot.setGrid(grid);
+		the_one = bot.getBest(current);
 		
 		// Place best move
 		int j = 0;
@@ -101,6 +103,10 @@ Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI) {
 			moveLeft();
 		}
 	}
+}
+
+void Tetris::setDNA(float aggregate_height, float complete_lines, float holes, float bumpiness) {
+	
 }
 
 bool Tetris::ground() {
@@ -170,8 +176,8 @@ void Tetris::update() {
 		
 		// Create AI
 		if (withAI) {
-			AI bot = AI(grid, shapes);
-			the_one = bot.getBest(current, grid);
+			bot.setGrid(grid);
+			the_one = bot.getBest(current);
 		
 			// Place best move
 			int j = 0;
@@ -227,8 +233,8 @@ void Tetris::reset() {
 	
 	// Create AI
 	if (withAI) {
-		AI bot = AI(grid, shapes);
-		the_one = bot.getBest(current, grid);
+		bot.setGrid(grid);
+		the_one = bot.getBest(current);
 		
 		// Place best move
 		int j = 0;
@@ -246,7 +252,7 @@ void Tetris::reset() {
 
 int Tetris::drawScore(ofTrueTypeFont &myFont) {
 	string s = to_string(score);
-	myFont.drawString(s, x - 5 * blockSize, y + blockSize);
+	myFont.drawString(s, x - 7 * blockSize, y + blockSize);
 	return this->score;
 }
 
@@ -329,6 +335,18 @@ bool Tetris::draw(ofTrueTypeFont &myFont) {
 		}
 	}
 	
+	// AI
+	if (withAI) {
+		ofSetHexColor(ofHexToInt("919798"));
+		for (int i = 0; i < shapes[the_one.shape].size(); i++) {
+			for (int j = 0; j < shapes[the_one.shape][i].size(); j++) {
+				if (shapes[the_one.shape][i][j]) {
+					ofDrawRectangle(x + the_one.x * blockSize + j * blockSize, y + the_one.y * blockSize + i * blockSize, blockSize, blockSize);
+				}
+			}
+		}
+	}
+	
 	// Current
 	ofSetHexColor(ofHexToInt(colors[current.shape - (current.shape % 4)]));
 	for (int i = 0; i < shapes[current.shape].size(); i++) {
@@ -349,18 +367,6 @@ bool Tetris::draw(ofTrueTypeFont &myFont) {
 				}
 			}
 			ofDrawRectangle(x + (width+3) * blockSize + j * blockSize, y + i * blockSize, blockSize, blockSize);
-		}
-	}
-	
-	// AI
-	if (withAI) {
-		ofSetHexColor(ofHexToInt("919798"));
-		for (int i = 0; i < shapes[the_one.shape].size(); i++) {
-			for (int j = 0; j < shapes[the_one.shape][i].size(); j++) {
-				if (shapes[the_one.shape][i][j]) {
-					ofDrawRectangle(x + the_one.x * blockSize + j * blockSize, y + the_one.y * blockSize + i * blockSize, blockSize, blockSize);
-				}
-			}
 		}
 	}
 	
