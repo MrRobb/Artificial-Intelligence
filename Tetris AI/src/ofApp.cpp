@@ -13,7 +13,7 @@ void ofApp::setup(){
 	ofSetFrameRate(60);
 	ofSetBackgroundColorHex(ofHexToInt("0D1B1E"));
 	ofDisableDataPath();
-	myFont.load("data/myfont.otf", min(ofGetHeight(), ofGetWidth()) / 38);
+	myFont.load("data/myfont.otf", min(ofGetWidth(), ofGetHeight())/ (rowSize * 10));
 	
 	population = Population(4, 0.025, ai, 0);
 	for (auto dna : population.allValues()) {
@@ -70,11 +70,12 @@ void ofApp::draw(){
 		if (dead == n and dead == ai) {
 			// Evolve
 			population.calculateFitness(scores);
-			vector<float> best = population[population.getBest()].getValues();
+			int i = population.getBest();
+			vector<float> best = population[i].getValues();
 			cerr << population.getAverage() << " ";
 			cerr << population.getGenerations() << " -> ";
-			
-			cerr << "Best:";
+			cerr << "Best: ";
+			cerr << scores[i];
 			for (auto& value : best) {
 				cerr << ' ' << value;
 			}
@@ -82,7 +83,7 @@ void ofApp::draw(){
 			population.naturalSelection();
 			Population aux = population.generate(4);
 			population = aux;
-			int w = ofGetWidth()/2;
+			int w = ofGetWidth();
 			int h = ofGetHeight();
 			for (int i = 0; i < n; i++) {
 				gameOvers[i] = not gameOvers[i];
@@ -226,7 +227,7 @@ void ofApp::windowResized(int w, int h){
 	for (int i = 0; i < n; i++) {
 		games[i].realloc(w/rowSize * (i%rowSize), w/rowSize * ((i%rowSize) + 1), h/cols * int(i/rowSize), h/cols * int(i/rowSize) + h/cols);
 	}
-	myFont.load("data/myfont.otf", min(w, h) / 38);
+	myFont.load("data/myfont.otf", min(w, h)/ (rowSize * 10));
 }
 
 //--------------------------------------------------------------

@@ -34,7 +34,7 @@ public:
 	vector<int> scores;
 	int n = 80;
 	int ai = 80;
-	int rowSize = 8;
+	int rowSize = 10;
 	int cols = ai / (rowSize+1) + 1;
 	ofTrueTypeFont myFont;
 	Population population;

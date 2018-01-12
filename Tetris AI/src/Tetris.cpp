@@ -89,7 +89,10 @@ Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna) {
 	// Create AI
 	if (withAI) {
 		this->bot.setGrid(grid);
-		the_one = bot.getBest(current);
+		vector<Shape> aux (2);
+		aux[0] = current;
+		aux[1] = next;
+		the_one = bot.getBest(aux, 0).first;
 		
 		// Place best move
 		int j = 0;
@@ -177,7 +180,10 @@ void Tetris::update() {
 		// Create AI
 		if (withAI) {
 			bot.setGrid(grid);
-			the_one = bot.getBest(current);
+			vector<Shape> aux (2);
+			aux[0] = current;
+			aux[1] = next;
+			the_one = bot.getBest(aux, 0).first;
 		
 			// Place best move
 			int j = 0;
@@ -234,7 +240,10 @@ void Tetris::reset() {
 	// Create AI
 	if (withAI) {
 		bot.setGrid(grid);
-		the_one = bot.getBest(current);
+		vector<Shape> aux (2);
+		aux[0] = current;
+		aux[1] = next;
+		the_one = bot.getBest(aux, 0).first;
 		
 		// Place best move
 		int j = 0;

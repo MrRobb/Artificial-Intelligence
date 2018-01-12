@@ -142,34 +142,37 @@ float AI::calculate_bumpiness(Shape &s) {
 
 float AI::score(Shape &s)
 {
-	place_piece(s);
 	float a = calculate_height(s) * aggregate_height;
 	float b = calculate_lines(s) * complete_lines;
 	float c = calculate_holes(s) * holes;
 	float d = calculate_bumpiness(s) * bumpiness;
-	remove_piece(s);
 	return a+b+c+d;
 }
 
-Shape AI::getBest(Shape s_inicial)
+pair<Shape, float> AI::getBest(vector<Shape> s_inicial, int i)
 {
-	s_inicial.shape = Blocks(s_inicial.shape - s_inicial.shape % 4);
+	s_inicial[i].shape = Blocks(s_inicial[i].shape - s_inicial[i].shape % 4);
 	float bestScore;
 	Shape best;
 	bool start = true;
-	best.shape = s_inicial.shape;
+	best.shape = s_inicial[i].shape;
 	
 	for (int rotation = 0; rotation < 4; rotation++) {
 		
-		while (moveLeft(s_inicial));
+		while (moveLeft(s_inicial[i]));
 		
-		while (!in(s_inicial, 0, 0))
+		while (!in(s_inicial[i], 0, 0))
 		{
-			Shape s = s_inicial;
+			Shape s = s_inicial[i];
 			
 			while (moveDown(s));
 			
+			place_piece(s);
 			float points = score(s);
+			
+			if (i < s_inicial.size() - 1) {
+				points += getBest(s_inicial, i+1).second;
+			}
 			if (start or points > bestScore) {
 				best.x = s.x;
 				best.y = s.y;
@@ -177,13 +180,14 @@ Shape AI::getBest(Shape s_inicial)
 				bestScore = points;
 				start = false;
 			}
+			remove_piece(s);
 			
-			++s_inicial.x;
+			s_inicial[i].x++;
 		}
 		
-		rotateCustom(s_inicial, CLOCKWISE);
+		rotateCustom(s_inicial[i], CLOCKWISE);
 	}
 	
-	return best;
+	return make_pair(best, bestScore);
 }
 

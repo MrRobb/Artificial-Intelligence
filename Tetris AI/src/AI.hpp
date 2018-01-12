@@ -69,7 +69,7 @@ public:
 	
 	float score(Shape &s);
 	
-	Shape getBest(Shape s_inicial);
+	pair<Shape, float> getBest(vector<Shape> s_inicial, int i);
 };
 
 #endif /* AI_hpp */
