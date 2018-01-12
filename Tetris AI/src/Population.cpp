@@ -59,7 +59,7 @@ Population Population::generate(int length) {
 			DNA dna_a = this->pool[a];
 			DNA dna_b = this->pool[b];
 			DNA child = dna_a.crossover(dna_b);
-			child.mutate(mutationRate);
+			child.mutate(mutationRate, generation+1);
 			p.population[i] = child;
 		}
 		pool = vector<DNA>();

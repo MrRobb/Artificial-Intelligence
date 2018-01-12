@@ -41,7 +41,7 @@ public:
 	DNA crossover(DNA &partner);
 	
 	// mutation
-	void mutate(float mutationRate);
+	void mutate(float mutationRate, int generation);
 };
 
 #endif /* DNA_hpp */
