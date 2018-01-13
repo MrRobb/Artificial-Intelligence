@@ -2,6 +2,7 @@
 #include "DNA.hpp"
 
 int dead = 0;
+bool training = false;
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -32,7 +33,7 @@ void ofApp::setup(){
 			int w2 = w/rowSize * ((i % rowSize) + 1);
 			int h1 = h/cols * int(i/rowSize);
 			int h2 = h/cols * int(i/rowSize) + h/cols;
-			games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i]);
+			games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i], training);
 		}
 	}
 	else {
@@ -43,10 +44,10 @@ void ofApp::setup(){
 			int w2 = w/rowSize * ((i % rowSize) + 1);
 			int h1 = h/cols * int(i/rowSize);
 			int h2 = h/cols * int(i/rowSize) + h/cols;
-			games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i]);
+			games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i], training);
 		}
 		int i = n - 1;
-		games[i] = Tetris (w, w*2, 0, h, (i < ai), NULL);
+		games[i] = Tetris (w, w*2, 0, h, (i < ai), NULL, training);
 	}
 }
 
@@ -92,7 +93,7 @@ void ofApp::draw(){
 				int w2 = w/rowSize * ((i % rowSize) + 1);
 				int h1 = h/cols * int(i/rowSize);
 				int h2 = h/cols * int(i/rowSize) + h/cols;
-				games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i]);
+				games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i], training);
 			}
 			dead = 0;
 		}

@@ -56,7 +56,7 @@ private:
 public:
 	Tetris();
 	
-	Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna);
+	Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna, bool training);
 	
 	void setDNA(float aggregate_height, float complete_lines, float holes, float bumpiness);
 	

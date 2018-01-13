@@ -63,7 +63,7 @@ Tetris::Tetris() {
 	
 }
 
-Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna) {
+Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna, bool training) {
 	// Initialize
 	this->blockSize = min(w2 - w1, h2 - h1) / 28;
 	this->x = w1 + (w2 - w1) / 2 - blockSize * width/2;
@@ -75,7 +75,12 @@ Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna) {
 	init_colors();
 	this->withAI = withAI;
 	this->bot = AI(shapes);
-	bot.setDNA(dna[0], dna[1], dna[2], dna[3]);
+	if (training) {
+		bot.setDNA(dna[0], dna[1], dna[2], dna[3]);
+	}
+	else {
+		bot.setDNA(-0.376789, 0.336798, -0.443753, -0.157428);
+	}
 	
 	// Current Initialization
 	current.x = 4;
