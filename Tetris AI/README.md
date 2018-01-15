@@ -5,7 +5,7 @@ This is an OpenFrameworks app ---> You have to move the entire folder to your Op
 ## Download
 You can download compiled binaries here:
 
-- [Mac](https://github.com/MrRobb/Artificial-Intelligence/releases/download/Tetrisv1.1/Tetris.AI.app.MacOS.zip)
-- [Windows 64 bits]()
-- [Windows 32 bits]()
-- [Ubuntu]()
+- [Mac](https://github.com/MrRobb/Artificial-Intelligence/releases/download/Tetris_v1.3/Tetris.app.MacOSX.zip)
+- [Windows 64 bits](https://github.com/MrRobb/Artificial-Intelligence/releases/download/Tetris_v1.3/Tetris.Windows.64.zip)
+- [Windows 32 bits](https://github.com/MrRobb/Artificial-Intelligence/releases/download/Tetris_v1.3/Tetris.Windows.32.zip)
+- [Ubuntu](https://github.com/MrRobb/Artificial-Intelligence/releases/download/Tetris_v1.3/Tetris.Ubuntu.16.04.16.zip)
