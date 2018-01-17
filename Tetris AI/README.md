@@ -1,6 +1,6 @@
 # Tetris AI
 
-![Tetris](https://j.gifs.com/mQG1zA.gif)
+[![Tetris](https://j.gifs.com/mQG1zA.gif)](https://www.instagram.com/p/Bdqajy1jeIW)
 
 This is an OpenFrameworks app ---> You have to move the entire folder to your OpenFrameworks environment to make it work (compile it yourself).
 
