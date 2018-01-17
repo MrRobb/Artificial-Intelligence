@@ -1,6 +1,6 @@
 # Vehicles
 
-[![https://j.gifs.com/pQ74vX.gif]](https://www.instagram.com/p/Bdj98QGjmqh)
+[![Vehicles](https://j.gifs.com/pQ74vX.gif)](https://www.instagram.com/p/Bdj98QGjmqh)
 
 This is an OpenFrameworks app ---> have to move the src, bin and other configs to your OpenFrameworks environment to make it work (compile it yourself).
 
