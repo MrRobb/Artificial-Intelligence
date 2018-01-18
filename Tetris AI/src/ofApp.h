@@ -32,10 +32,12 @@ public:
 	vector<bool> gameOvers;
 	bool withAI = true;
 	vector<int> scores;
-	int n = 2;
-	int ai = 1;
-	int rowSize = 1;
+	int n = 49;
+	int ai = 49;
+	int rowSize = 7;
 	int cols = ai / (rowSize+1) + 1;
+	int dead = 0;
+	bool training = true;
 	ofTrueTypeFont myFont;
 	Population population;
 };
