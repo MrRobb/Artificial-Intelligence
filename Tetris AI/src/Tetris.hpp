@@ -45,6 +45,7 @@ private:
 	int y;
 	bool withAI = true;
 	AI bot;
+	queue<unsigned char> pieces;
 	
 	// Functions
 	void init_shapes();
@@ -56,7 +57,7 @@ private:
 public:
 	Tetris();
 	
-	Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna, bool training);
+	Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna, queue<unsigned char> &pieces, bool training);
 	
 	void setDNA(float aggregate_height, float complete_lines, float holes, float bumpiness);
 	

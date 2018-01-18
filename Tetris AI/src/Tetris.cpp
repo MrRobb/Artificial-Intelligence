@@ -63,7 +63,7 @@ Tetris::Tetris() {
 	
 }
 
-Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna, bool training) {
+Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna, queue<unsigned char> &pieces, bool training) {
 	// Initialize
 	this->blockSize = min(w2 - w1, h2 - h1) / 28;
 	this->x = w1 + (w2 - w1) / 2 - blockSize * width/2;
@@ -93,7 +93,14 @@ Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna, bool traini
 	
 	// Create AI
 	if (withAI) {
+		this->pieces = pieces;
 		this->bot.setGrid(grid);
+		if (not pieces.empty()) {
+			current.shape = Blocks(int(this->pieces.front() % 7) * 4);
+			this->pieces.pop();
+			next.shape = Blocks(int(this->pieces.front() % 7) * 4);
+			this->pieces.pop();
+		}
 		vector<Shape> aux (2);
 		aux[0] = current;
 		aux[1] = next;
@@ -111,10 +118,6 @@ Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna, bool traini
 			moveLeft();
 		}
 	}
-}
-
-void Tetris::setDNA(float aggregate_height, float complete_lines, float holes, float bumpiness) {
-	
 }
 
 bool Tetris::ground() {
@@ -185,6 +188,10 @@ void Tetris::update() {
 		// Create AI
 		if (withAI) {
 			bot.setGrid(grid);
+			if (not pieces.empty()) {
+				next.shape = Blocks(int(this->pieces.front() % 7) * 4);
+				this->pieces.pop();
+			}
 			vector<Shape> aux (2);
 			aux[0] = current;
 			aux[1] = next;
@@ -272,6 +279,7 @@ int Tetris::drawScore(ofTrueTypeFont &myFont) {
 
 bool Tetris::draw(ofTrueTypeFont &myFont) {
 	// Game over
+	if (pieces.empty()) return true;
 	for (int j = 0; j < width; j++) {
 		if (grid[1][j]) {
 			return true;

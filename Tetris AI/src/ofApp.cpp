@@ -1,9 +1,6 @@
 #include "ofApp.h"
 #include "DNA.hpp"
 
-int dead = 0;
-bool training = false;
-
 //--------------------------------------------------------------
 void ofApp::setup(){
 	// Config
@@ -14,8 +11,9 @@ void ofApp::setup(){
 	ofSetFrameRate(60);
 	ofSetBackgroundColorHex(ofHexToInt("0D1B1E"));
 	ofDisableDataPath();
-	myFont.load("data/myfont.otf", min(ofGetWidth(), ofGetHeight())/ (rowSize * 10));
+	myFont.load("data/myfont.otf", min(ofGetWidth(), ofGetHeight())/ (rowSize * 20));
 	
+	queue<unsigned char> pieces;
 	population = Population(4, 0.025, ai, 0);
 	for (auto dna : population.allValues()) {
 		for (auto value : dna) {
@@ -28,12 +26,16 @@ void ofApp::setup(){
 	if (ai == n) {
 		int w = ofGetWidth();
 		int h = ofGetHeight();
+		int generation = population.getGenerations();
+		for (int i = 0; i < 100 * (generation + 1); i++) {
+			pieces.push(rand());
+		}
 		for (int i = 0; i < n; i++) {
 			int w1 = w/rowSize * (i % rowSize);
 			int w2 = w/rowSize * ((i % rowSize) + 1);
 			int h1 = h/cols * int(i/rowSize);
 			int h2 = h/cols * int(i/rowSize) + h/cols;
-			games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i], training);
+			games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i], pieces, training);
 		}
 	}
 	else {
@@ -44,10 +46,10 @@ void ofApp::setup(){
 			int w2 = w/rowSize * ((i % rowSize) + 1);
 			int h1 = h/cols * int(i/rowSize);
 			int h2 = h/cols * int(i/rowSize) + h/cols;
-			games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i], training);
+			games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i], pieces, training);
 		}
 		int i = n - 1;
-		games[i] = Tetris (w, w*2, 0, h, (i < ai), NULL, training);
+		games[i] = Tetris (w, w*2, 0, h, (i < ai), NULL, pieces, training);
 	}
 }
 
@@ -86,6 +88,11 @@ void ofApp::draw(){
 			population = aux;
 			int w = ofGetWidth();
 			int h = ofGetHeight();
+			int generation = population.getGenerations();
+			queue<unsigned char> pieces;
+			for (int i = 0; i < 100 * (generation + 1); i++) {
+				pieces.push(rand());
+			}
 			for (int i = 0; i < n; i++) {
 				gameOvers[i] = not gameOvers[i];
 				games[i].reset();
@@ -93,7 +100,7 @@ void ofApp::draw(){
 				int w2 = w/rowSize * ((i % rowSize) + 1);
 				int h1 = h/cols * int(i/rowSize);
 				int h2 = h/cols * int(i/rowSize) + h/cols;
-				games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i], training);
+				games[i] = Tetris (w1, w2, h1, h2, (i < ai), population[i], pieces, training);
 			}
 			dead = 0;
 		}
@@ -228,7 +235,7 @@ void ofApp::windowResized(int w, int h){
 	for (int i = 0; i < n; i++) {
 		games[i].realloc(w/rowSize * (i%rowSize), w/rowSize * ((i%rowSize) + 1), h/cols * int(i/rowSize), h/cols * int(i/rowSize) + h/cols);
 	}
-	myFont.load("data/myfont.otf", min(w, h)/ (rowSize * 10));
+	myFont.load("data/myfont.otf", min(w, h)/ (rowSize * 20));
 }
 
 //--------------------------------------------------------------
