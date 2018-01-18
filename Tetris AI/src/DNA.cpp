@@ -61,7 +61,7 @@ void DNA::mutate(float mutationRate, int generation) {
 	for (int i = 0; i < genes.size(); i++) {
 		float r = ((double) rand() / (RAND_MAX));
 		if (r < mutationRate) {
-			genes[i] += 1/generation * (float(float(rand()) - float(RAND_MAX)/2) / float(RAND_MAX));
+			genes[i] = (float(float(rand()) - float(RAND_MAX)/2) / float(RAND_MAX));
 		}
 	}
 }
