@@ -4,11 +4,11 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
 [![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
 
-<div>
+<p align="center">
 	<a href="https://www.instagram.com/p/Bdqajy1jeIW">
-		<img src="https://j.gifs.com/mQG1zA.gif" height="500" hspace="190">
+		<img src="https://j.gifs.com/mQG1zA.gif" width=60%>
 	</a>
-</div>
+</p>
 
 ## Download
 You can download compiled binaries here:
