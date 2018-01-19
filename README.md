@@ -1,8 +1,11 @@
 # Artificial-Intelligence
 
-Every project has its own README.md with their compiling, running, downloading information.
+Every project has its own README.md with their (compiling and running) or (downloading) information.
 
-So, what are you waiting for? Chose one folder!
+So, what are you waiting for? Click a gif!
+
+[![Vehicles](https://j.gifs.com/BLQVZW.gif)](https://github.com/MrRobb/Artificial-Intelligence/tree/master/Vehicles)
+[![Tetris](https://j.gifs.com/mQG1zA.gif)](https://github.com/MrRobb/Artificial-Intelligence/tree/master/Tetris%20AI)
 
 ### Pull requests are always welcome
 
