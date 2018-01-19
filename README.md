@@ -28,7 +28,7 @@ Every project has its own README.md with their (compiling and running) or (downl
 
 (I will answer in 24h max).
 
-### Pull requests are always welcome
+## Pull requests are always welcome
 
 We are always thrilled to receive pull requests, and do our best to
 process them as fast as possible. Not sure if that typo is worth a pull
