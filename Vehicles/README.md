@@ -2,7 +2,7 @@
 
 [![HitCount](http://hits.dwyl.io/mrrobb/Artificial-Intelligence/tree/master/Vehicles.svg)](http://hits.dwyl.io/mrrobb/Artificial-Intelligence/tree/master/Vehicles)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
-[![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star&maxAge=9992000)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
 
 <p align="center">
 	<a href="https://www.instagram.com/p/Bdj98QGjmqh">
@@ -23,7 +23,7 @@ If any of these is not working just create an [issue](https://github.com/MrRobb/
 ## Do you like it?
 
 **Let me know with a**
-[![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star&maxAge=9992000)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
 
 **If you have any suggestion you can create an [issue](https://github.com/MrRobb/Artificial-Intelligence/issues) to let me know**
 
