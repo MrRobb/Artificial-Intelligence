@@ -12,10 +12,10 @@ Every project has its own README.md with their (compiling and running) or (downl
 
 <div>
 	<a href="https://github.com/MrRobb/Artificial-Intelligence/tree/master/Vehicles">
-		<img src="https://j.gifs.com/BLQVZW.gif" height="440">
+		<img src="https://j.gifs.com/BLQVZW.gif" width=50%>
 	</a>
 	<a href="https://github.com/MrRobb/Artificial-Intelligence/tree/master/Tetris%20AI">
-		<img src="https://j.gifs.com/mQG1zA.gif" height="440">
+		<img src="https://j.gifs.com/mQG1zA.gif" width=50%>
 	</a>
 </div>
 
