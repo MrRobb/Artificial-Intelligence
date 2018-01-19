@@ -25,6 +25,10 @@ If any of these is not working just create an [issue](https://github.com/MrRobb/
 **Let me know with a**
 [![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
 
+**If you have any suggestion you can create an [issue](https://github.com/MrRobb/Artificial-Intelligence/issues) to let me know**
+
+(I will answer in 24h max).
+
 ## Compiling
 
 If your OS is none of the above or if you would like to compile it yourself just follow the instructions below.
