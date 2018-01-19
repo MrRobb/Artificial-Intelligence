@@ -1,4 +1,8 @@
-# Artificial-Intelligence
+<p align="center">
+	<a href="https://github.com/MrRobb/Artificial-Intelligence">
+		<img src="https://i.imgur.com/CrjVAxR.png" width=60%>
+	</a>
+</p>
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
