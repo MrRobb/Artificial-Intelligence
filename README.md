@@ -1,6 +1,6 @@
 <p align="center">
 	<a href="https://github.com/MrRobb/Artificial-Intelligence">
-		<img src="https://i.imgur.com/CrjVAxR.png" width=60%>
+		<img src="https://i.imgur.com/CrjVAxR.png" width=55%>
 	</a>
 </p>
 
