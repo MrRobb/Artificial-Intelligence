@@ -1,8 +1,14 @@
 # Artificial-Intelligence
 
+[![HitCount](http://hits.dwyl.io/mrrobb/Artificial-Intelligence.svg)](http://hits.dwyl.io/mrrobb/Artificial-Intelligence)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
+[![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
+
+I do this when I'm bored. I hope you like it.
+
 Every project has its own README.md with their (compiling and running) or (downloading) information.
 
-So, what are you waiting for? Click a gif!
+**So, what are you waiting for? Click a gif!**
 
 <div>
 	<a href="https://github.com/MrRobb/Artificial-Intelligence/tree/master/Vehicles">
@@ -12,6 +18,15 @@ So, what are you waiting for? Click a gif!
 		<img src="https://j.gifs.com/mQG1zA.gif" height="440">
 	</a>
 </div>
+
+## Do you like it?
+
+**Let me know with a**
+[![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star&maxAge=2592000)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
+
+**If you have any suggestion you can create an [issue](https://github.com/MrRobb/Artificial-Intelligence/issues) to let me know**
+
+(I will answer in 24h max).
 
 ### Pull requests are always welcome
 
@@ -24,4 +39,6 @@ discouraged! If there's a problem with the implementation, hopefully you
 received feedback on what to improve.
 
 
-**Do you want to contribute?** You can learn how from this *free* series [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
+**Do you want to contribute?**
+
+You can learn how from this *free* series [How to Contribute to an Open Source Project on GitHub](https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github)
