@@ -26,7 +26,7 @@ Every project has its own README.md with their (compiling and running) or (downl
 	<a href="https://github.com/MrRobb/Artificial-Intelligence/tree/master/Tetris%20AI">
 		<img src="https://j.gifs.com/mQG1zA.gif" width=49.0%>
 	</a>
-	<a href="https://github.com/MrRobb/Artificial-Intelligence/tree/master/Tetris%20AI">
+	<a href="https://github.com/MrRobb/Artificial-Intelligence/tree/master/Genetic%20Algorithms">
 		<img src="https://j.gifs.com/4RV6w0.gif" width=48.2%>
 	</a>
 </div>
