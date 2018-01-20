@@ -8,43 +8,54 @@
 
 #include "DNA.hpp"
 
-DNA::DNA(){
-	
-}
+DNA::DNA(){}
 
-// constructor
-DNA::DNA(int length) {
+DNA::DNA(int length)
+{
+	this->my_fitness = 0;
 	this->genes = vector<float> (length);
-	for (int i = 0; i < length; i++) {
-		this->genes[i] = (float(rand()) - float(RAND_MAX / 2)) / float(RAND_MAX);
+	
+	for (int i = 0; i < length; i++)
+	{
+		// Assigns a random number between -1 and 1
+		this->genes[i] = (float(rand()) - float(RAND_MAX / 2)) / float(RAND_MAX / 2);
 	}
 	return *this;
 }
 
-float DNA::operator[](int i) {
+float& DNA::operator[](int i)
+{
 	return this->genes[i];
 }
 
-vector<float> DNA::getValues() {
+void DNA::operator=(const vector<float> &v)
+{
+	this->genes = v;
+}
+
+vector<float> DNA::getValues()
+{
 	return genes;
 }
 
-// fitness function
-void DNA::fitness (int score, int max_score) {
+void DNA::fitness (int score, int max_score)
+{
 	if (max_score != 0) {
 		my_fitness = float(score) / float(max_score);
 	}
+	
 	else {
 		my_fitness = 0;
 	}
 }
 
-float DNA::getFitness() {
+float DNA::getFitness()
+{
 	return my_fitness;
 }
 
-// crossover
-DNA DNA::crossover(DNA &partner) {
+DNA DNA::crossover(DNA &partner)
+{
 	DNA child(int(partner.genes.size()));
 	
 	int midpoint = int(rand() % genes.size());
@@ -56,12 +67,15 @@ DNA DNA::crossover(DNA &partner) {
 	return child;
 }
 
-// mutation
-void DNA::mutate(float mutationRate, int generation) {
-	for (int i = 0; i < genes.size(); i++) {
+void DNA::mutate(float mutationRate)
+{
+	for (int i = 0; i < genes.size(); i++)
+	{
 		float r = ((double) rand() / (RAND_MAX));
-		if (r < mutationRate) {
-			genes[i] = (float(float(rand()) - float(RAND_MAX)/2) / float(RAND_MAX));
+		if (r < mutationRate)
+		{
+			// Assigns a random number between -1 and 1
+			genes[i] = (float(float(rand()) - float(RAND_MAX)/2) / float(RAND_MAX / 2));
 		}
 	}
 }
