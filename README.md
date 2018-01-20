@@ -11,7 +11,7 @@
 [![HitCount](http://hits.dwyl.io/mrrobb/Artificial-Intelligence.svg)](http://hits.dwyl.io/mrrobb/Artificial-Intelligence)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
 [![GitHub Issues](https://img.shields.io/github/issues/mrrobb/Artificial-Intelligence.svg)](https://github.com/mrrobb/Artificial-Intelligence/issues)
-[![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star&maxAge=9992000)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
 
 I do this when I'm bored. I hope you like it.
 
@@ -34,7 +34,7 @@ Every project has its own README.md with their (compiling and running) or (downl
 ## Do you like it?
 
 **Let me know with a**
-[![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star&maxAge=9992000)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/mrrobb/Artificial-Intelligence.svg?style=social&label=Star)](https://GitHub.com/mrrobb/Artificial-Intelligence/stargazers)
 
 **If you have any suggestion you can create an [issue](https://github.com/MrRobb/Artificial-Intelligence/issues) to let me know**
 
