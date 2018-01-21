@@ -16,12 +16,12 @@ I built an evolutionary AI that is pretty good playing this game.
 
 Can you beat it? Well... you can try.
 
-Coming soon:
+You can download compiled binaries here:
 
 - [Mac](https://github.com/MrRobb/Artificial-Intelligence/releases/download/Tetris_v2.0/Tetris.AI.app.MacOSX.zip)
-- [Windows 64 bits]()
-- [Windows 32 bits]()
-- [Ubuntu]()
+- Windows 64 bits
+- Windows 32 bits
+- Ubuntu
 
 If any of these is not working just create an [issue](https://github.com/MrRobb/Artificial-Intelligence/issues) to let me know (I usually answer in 24h).
 
