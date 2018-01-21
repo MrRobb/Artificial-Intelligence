@@ -40,24 +40,25 @@ string Chatbot::understandSentence(string &text)
 	return response.data;
 }
 
-string Chatbot::urlEncoding(const string &text)
-{
-	string ret;
-	char ch;
-	int ii;
+string Chatbot::urlEncoding(const string &text) {
+	ostringstream escaped;
+	escaped.fill('0');
+	escaped << hex;
 	
-	for (int i = 0; i < text.length(); i++)
-	{
-		if (int(text[i]) == '%')
-		{
-			sscanf(text.substr(i + 1, 2).c_str(), "%x", &ii);
-			ch = static_cast<char> (ii);
-			ret += ch;
-			i = i + 2;
+	for (string::const_iterator i = text.begin(), n = text.end(); i != n; ++i) {
+		string::value_type c = (*i);
+		
+		// Keep alphanumeric and other accepted characters intact
+		if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') {
+			escaped << c;
+			continue;
 		}
-		else
-			ret += text[i];
+		
+		// Any other characters are percent-encoded
+		escaped << uppercase;
+		escaped << '%' << setw(2) << int((unsigned char) c);
+		escaped << nouppercase;
 	}
 	
-	return ret;
+	return escaped.str();
 }
