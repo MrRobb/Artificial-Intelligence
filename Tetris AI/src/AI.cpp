@@ -3,6 +3,7 @@
 //  Tetris AI
 //
 //  Created by Roberto Ariosa Hernández on 09/01/2018.
+//  Copyright © 2018 Mr.Robb. All rights reserved.
 //
 
 #include "AI.hpp"

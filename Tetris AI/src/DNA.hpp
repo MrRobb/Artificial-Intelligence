@@ -40,6 +40,7 @@ public:
 	 @brief Access the genes directly.
 	 @pre i must be between 0 and lenght-1.
 	 @param i Position of the gene.
+	 @return The gene at position i.
 	 */
 	float& operator[](int i);
 	
@@ -60,6 +61,7 @@ public:
 	/**
 	 @brief Get the fitness of the individual.
 	 @pre Fitness function has been already executed.
+	 @return The fitness of the individual.
 	 @see DNA::fitness
 	 */
 	float getFitness();
@@ -68,6 +70,7 @@ public:
 	 @brief Creates a child with mixed genes via crossover.
 	 @f$ itself + partner = child @f$
 	 @param partner It will provide some genetic information.
+	 @return The child.
 	 */
 	DNA crossover(DNA &partner);
 	

@@ -23,21 +23,22 @@ public:
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
 
-	float speed = 1.0;
+	float speed = 1.25;
 	int timeFrame = 0;
 	vector<Tetris> games;
 	float counter = 0;
 	bool finishRotation = true;
+	bool instructions = true;
 	bool isPaused = false;
 	vector<bool> gameOvers;
 	bool withAI = true;
 	vector<int> scores;
-	int n = 49;
-	int ai = 49;
-	int rowSize = 7;
+	int n = 2;
+	int ai = 1;
+	int rowSize = 1;
 	int cols = ai / (rowSize+1) + 1;
 	int dead = 0;
-	bool training = true;
+	bool training = false;
 	ofTrueTypeFont myFont;
 	Population population;
 };

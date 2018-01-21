@@ -3,6 +3,7 @@
 //  Tetris AI
 //
 //  Created by Roberto Ariosa Hernández on 06/01/2018.
+//  Copyright © 2018 Mr.Robb. All rights reserved.
 //
 
 #include "Tetris.hpp"
@@ -74,6 +75,7 @@ Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna, queue<unsig
 	init_shapes();
 	init_colors();
 	this->withAI = withAI;
+	this->training = training;
 	this->bot = AI(shapes);
 	if (training) {
 		bot.setDNA(dna[0], dna[1], dna[2], dna[3]);
@@ -91,16 +93,17 @@ Tetris::Tetris(int w1, int w2, int h1, int h2, bool withAI, DNA dna, queue<unsig
 	next.y = 0;
 	next.shape = Blocks(int(rand() % 7) * 4);
 	
+	this->pieces = pieces;
+	if (not pieces.empty()) {
+		current.shape = Blocks(int(this->pieces.front() % 7) * 4);
+		this->pieces.pop();
+		next.shape = Blocks(int(this->pieces.front() % 7) * 4);
+		this->pieces.pop();
+	}
+	
 	// Create AI
 	if (withAI) {
-		this->pieces = pieces;
 		this->bot.setGrid(grid);
-		if (not pieces.empty()) {
-			current.shape = Blocks(int(this->pieces.front() % 7) * 4);
-			this->pieces.pop();
-			next.shape = Blocks(int(this->pieces.front() % 7) * 4);
-			this->pieces.pop();
-		}
 		vector<Shape> aux (2);
 		aux[0] = current;
 		aux[1] = next;
@@ -185,13 +188,14 @@ void Tetris::update() {
 		next.y = 0;
 		next.x = 4;
 		
+		if (not pieces.empty()) {
+			next.shape = Blocks(int(this->pieces.front() % 7) * 4);
+			this->pieces.pop();
+		}
+		
 		// Create AI
 		if (withAI) {
 			bot.setGrid(grid);
-			if (not pieces.empty()) {
-				next.shape = Blocks(int(this->pieces.front() % 7) * 4);
-				this->pieces.pop();
-			}
 			vector<Shape> aux (2);
 			aux[0] = current;
 			aux[1] = next;
@@ -202,10 +206,10 @@ void Tetris::update() {
 			
 			for (int i = 0; i < (the_one.shape % 4); i++)
 				rotate();
-			while (the_one.x > current.x and j++ < 1000) {
+			while (the_one.x > current.x and j++ < 100) {
 				moveRight();
 			}
-			while (the_one.x < current.x and j++ < 1000) {
+			while (the_one.x < current.x and j++ < 100) {
 				moveLeft();
 			}
 		}
@@ -274,12 +278,19 @@ void Tetris::reset() {
 int Tetris::drawScore(ofTrueTypeFont &myFont) {
 	string s = to_string(score);
 	myFont.drawString(s, x - 7 * blockSize, y + blockSize);
+	
+	ofTrueTypeFont myFont2;
+	myFont2.load("data/myfont.otf", blockSize / 1.25);
+	if (withAI)
+		myFont2.drawString("AI", x + (width - 0.75) * blockSize / 2, y - 2 * blockSize);
+	else
+		myFont2.drawString("YOU", x + (width - 2) * blockSize / 2,  y - 2 * blockSize);
 	return this->score;
 }
 
 bool Tetris::draw(ofTrueTypeFont &myFont) {
 	// Game over
-	if (pieces.empty()) return true;
+	if (pieces.empty() and training) return true;
 	for (int j = 0; j < width; j++) {
 		if (grid[1][j]) {
 			return true;

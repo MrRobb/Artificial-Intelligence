@@ -3,6 +3,7 @@
 //  Tetris AI
 //
 //  Created by Roberto Ariosa Hernández on 06/01/2018.
+//  Copyright © 2018 Mr.Robb. All rights reserved.
 //
 
 #ifndef Tetris_hpp
@@ -44,6 +45,7 @@ private:
 	int x;
 	int y;
 	bool withAI = true;
+	bool training = false;
 	AI bot;
 	queue<unsigned char> pieces;
 	

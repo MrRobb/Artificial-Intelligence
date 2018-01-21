@@ -3,6 +3,7 @@
 //  Tetris AI
 //
 //  Created by Roberto Ariosa Hernández on 09/01/2018.
+//  Copyright © 2018 Mr.Robb. All rights reserved.
 //
 
 #ifndef AI_hpp
@@ -26,10 +27,10 @@ struct Shape {
 };
 
 class AI {
-	float aggregate_height = -3.78;
-	float complete_lines = 1.6;
-	float holes = -2.31;
-	float bumpiness = -0.59;
+	float aggregate_height = 0.132802;
+	float complete_lines = 0.132802;
+	float holes = -0.344799;
+	float bumpiness = -0.0387222;
 	
 	vector< vector<unsigned char> > grid;
 	map<int,vector< vector<unsigned char> > > shapes;
