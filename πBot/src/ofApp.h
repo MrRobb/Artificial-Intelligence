@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxJSON.h"
+#include "Chatbot.hpp"
 
 using namespace std;
 
