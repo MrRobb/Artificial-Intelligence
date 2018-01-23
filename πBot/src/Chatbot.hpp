@@ -8,8 +8,7 @@
 #ifndef Chatbot_hpp
 #define Chatbot_hpp
 
-#include <stdio.h>
-#include "ofApp.h"
+#include "ofxJSON.h"
 
 using namespace std;
 

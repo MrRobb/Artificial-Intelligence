@@ -1,2 +1,2 @@
-ofxGui
 ofxJSON
+ofxSmartFont
