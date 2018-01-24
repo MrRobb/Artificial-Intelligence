@@ -19,9 +19,8 @@ Message Chatbot::whatAreYouTalkingAbout(string text)
 	}
 	
 	else {
-		ofLogError() << "Error --> parsing: " << wit << endl;
+		ofLogError() << "Error --> parsing: " << wit.text << endl;
 		return {"I don't understand that, yet.", true};
-		
 	}
 }
 
@@ -40,7 +39,7 @@ Message Chatbot::understandSentence(string &text)
 	// Check response
 	switch (response.status)
 	{
-		case 200:
+		case 400:
 			return {response.data, false};
 			break;
 			

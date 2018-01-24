@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F91DFB22018E9E700799A2B /* Chat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7F91DFB02018E9E700799A2B /* Chat.cpp */; };
 		B7F482C7BA23F82EF3C54521 /* InputTextField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85EAF2890B8F304F695036B /* InputTextField.cpp */; };
 		BE0D0D58EFADC7AD53F6F3A7 /* Chatbot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AE62FFB0DCC2A36DD17BD9B5 /* Chatbot.cpp */; };
 		BEDFEE7400C58EA4E412B757 /* ofxJSONElement.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F2B099E6BD1199664C48B177 /* ofxJSONElement.cpp */; };
@@ -53,6 +54,8 @@
 		2C7CF000B7B4F782C187C353 /* json.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = json.h; path = ../../../addons/ofxJSON/libs/jsoncpp/include/json/json.h; sourceTree = SOURCE_ROOT; };
 		61313493CDB52744E22A604D /* json-forwards.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = "json-forwards.h"; path = "../../../addons/ofxJSON/libs/jsoncpp/include/json/json-forwards.h"; sourceTree = SOURCE_ROOT; };
 		7F2D3AE22017A9F7007DD459 /* Graph.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Graph.hpp; path = src/graph/Graph.hpp; sourceTree = SOURCE_ROOT; };
+		7F91DFB02018E9E700799A2B /* Chat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Chat.cpp; sourceTree = "<group>"; };
+		7F91DFB12018E9E700799A2B /* Chat.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Chat.hpp; sourceTree = "<group>"; };
 		87472D11FE160946D501A175 /* Chatbot.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Chatbot.hpp; path = src/Chatbot.hpp; sourceTree = SOURCE_ROOT; };
 		9129E912A67A1F04227DE7C4 /* InputTextField.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = InputTextField.hpp; path = src/InputTextField.hpp; sourceTree = SOURCE_ROOT; };
 		AE62FFB0DCC2A36DD17BD9B5 /* Chatbot.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Chatbot.cpp; path = src/Chatbot.cpp; sourceTree = SOURCE_ROOT; };
@@ -117,13 +120,13 @@
 			name = local_addons;
 			sourceTree = "<group>";
 		};
-		7F2D3AE72017AA72007DD459 /* graph */ = {
+		7F2D3AE72017AA72007DD459 /* brain */ = {
 			isa = PBXGroup;
 			children = (
 				7F2D3AE22017A9F7007DD459 /* Graph.hpp */,
 			);
-			name = graph;
-			path = src/graph;
+			name = brain;
+			path = src/brain;
 			sourceTree = SOURCE_ROOT;
 		};
 		92CB46D48EC846004FCBE8EF /* ofxSmartFont */ = {
@@ -201,14 +204,16 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				7F2D3AE72017AA72007DD459 /* graph */,
+				7F2D3AE72017AA72007DD459 /* brain */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
-				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				AE62FFB0DCC2A36DD17BD9B5 /* Chatbot.cpp */,
+				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				87472D11FE160946D501A175 /* Chatbot.hpp */,
-				D85EAF2890B8F304F695036B /* InputTextField.cpp */,
+				AE62FFB0DCC2A36DD17BD9B5 /* Chatbot.cpp */,
 				9129E912A67A1F04227DE7C4 /* InputTextField.hpp */,
+				D85EAF2890B8F304F695036B /* InputTextField.cpp */,
+				7F91DFB12018E9E700799A2B /* Chat.hpp */,
+				7F91DFB02018E9E700799A2B /* Chat.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -332,6 +337,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
+				7F91DFB22018E9E700799A2B /* Chat.cpp in Sources */,
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				BE0D0D58EFADC7AD53F6F3A7 /* Chatbot.cpp in Sources */,
 				B7F482C7BA23F82EF3C54521 /* InputTextField.cpp in Sources */,
