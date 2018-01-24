@@ -12,6 +12,11 @@
 
 using namespace std;
 
+struct Message {
+	string text;
+	bool error;
+};
+
 class Chatbot {
 	
 public:
@@ -20,7 +25,7 @@ public:
 	 @param text The text to process and comment about.
 	 @return Little comment about the data provided.
 	 */
-	string whatAreYouTalkingAbout(string text);
+	Message whatAreYouTalkingAbout(string text);
 	
 private:
 	/**
@@ -28,7 +33,7 @@ private:
 	 @param text Is the sentence to process.
 	 @return The response JSON in string format.
 	 */
-	string understandSentence(string &text);
+	Message understandSentence(string &text);
 	
 	/**
 	 @brief Encodes most of the non-alphanumeric values to URL encoding.

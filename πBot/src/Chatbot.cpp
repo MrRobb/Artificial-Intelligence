@@ -7,26 +7,25 @@
 
 #include "Chatbot.hpp"
 
-string Chatbot::whatAreYouTalkingAbout(string text)
+Message Chatbot::whatAreYouTalkingAbout(string text)
 {
 	string s = "";
-	string wit = understandSentence(text);
+	Message wit = understandSentence(text);
 	ofxJSON js;
 	
-	bool b = js.parse(wit);
-	
-	if (b) {
+	if (not wit.error and js.parse(wit.text)) {
 		ofLog() << "Parsed successfully" << endl;
+		return {"I understand.", false};
 	}
 	
 	else {
 		ofLogError() << "Error --> parsing: " << wit << endl;
+		return {"I don't understand that, yet.", true};
+		
 	}
-	
-	return s;
 }
 
-string Chatbot::understandSentence(string &text)
+Message Chatbot::understandSentence(string &text)
 {
 	ofHttpRequest y;
 	
@@ -42,11 +41,11 @@ string Chatbot::understandSentence(string &text)
 	switch (response.status)
 	{
 		case 200:
-			return response.data;
+			return {response.data, false};
 			break;
 			
 		default:
-			return response.error;
+			return {response.error, true};
 			break;
 	}
 }
