@@ -16,11 +16,11 @@ string Chatbot::whatAreYouTalkingAbout(string text)
 	bool b = js.parse(wit);
 	
 	if (b) {
-		ofLog() << js["entities"] << endl;
+		ofLog() << "Parsed successfully" << endl;
 	}
 	
 	else {
-		ofLogError() << "Error --> parsing" << endl;
+		ofLogError() << "Error --> parsing: " << wit << endl;
 	}
 	
 	return s;
@@ -32,24 +32,38 @@ string Chatbot::understandSentence(string &text)
 	
 	// Create request
 	y.url = "https://api.wit.ai/message?v=20180121&q=" + urlEncoding(text);
-	y.headers["Authorization"] = "Bearer WE3JCWB5KU23OC5ZTYBOI5NAOESFD7VN";
+	y.headers["Authorization"] = "Bearer QWLCVEWLZEE5JAF64HPDLTXGGNDM7HPF";
 	y.GET;
 	
 	// Execute request
 	auto response = ofURLFileLoader().handleRequest(y);
-	return response.data;
+	
+	// Check response
+	switch (response.status)
+	{
+		case 200:
+			return response.data;
+			break;
+			
+		default:
+			return response.error;
+			break;
+	}
 }
 
-string Chatbot::urlEncoding(const string &text) {
+string Chatbot::urlEncoding(const string &text)
+{
 	ostringstream escaped;
 	escaped.fill('0');
 	escaped << hex;
 	
-	for (string::const_iterator i = text.begin(), n = text.end(); i != n; ++i) {
+	for (string::const_iterator i = text.begin(), n = text.end(); i != n; ++i)
+	{
 		string::value_type c = (*i);
 		
 		// Keep alphanumeric and other accepted characters intact
-		if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') {
+		if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~')
+		{
 			escaped << c;
 			continue;
 		}
