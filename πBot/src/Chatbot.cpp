@@ -11,9 +11,9 @@ Message Chatbot::whatAreYouTalkingAbout(string text)
 {
 	string s = "";
 	Message wit = understandSentence(text);
-	ofxJSON js;
+	ofxJSON json;
 	
-	if (not wit.error and js.parse(wit.text)) {
+	if (not wit.error and json.parse(wit.text)) {
 		ofLog() << "Parsed successfully" << endl;
 		return {"I understand.", false};
 	}
@@ -24,7 +24,6 @@ Message Chatbot::whatAreYouTalkingAbout(string text)
 	}
 }
 
-Message Chatbot::understandSentence(string &text)
 {
 	ofHttpRequest y;
 	
@@ -47,6 +46,14 @@ Message Chatbot::understandSentence(string &text)
 			return {response.error, true};
 			break;
 	}
+}
+
+Message Chatbot::understandSentence(string &text)
+{
+	// Create request
+	string version = ofGetTimestampString("%Y%m%d");
+	string url = "https://api.wit.ai/message?v=" + version + "&q=" + urlEncoding(text);
+	return get(url);
 }
 
 string Chatbot::urlEncoding(const string &text)
@@ -73,4 +80,32 @@ string Chatbot::urlEncoding(const string &text)
 	}
 	
 	return escaped.str();
+}
+
+Message Chatbot::get(string& url)
+{
+	ofHttpRequest req;
+	
+	// Create request
+	req.url = url;
+	req.headers["Authorization"] = "Bearer SV4X2QKSLNUAHJWMQG37JURK54R23GT2";
+	req.GET;
+	
+	// Execute request
+	auto resp = ofURLFileLoader().handleRequest(req);
+	
+	switch (resp.status)
+	{
+		case 200:
+			return {resp.data, false};
+			break;
+		
+		case 400:
+			return {resp.data, false};
+			break;
+			
+		default:
+			return {resp.error, true};
+			break;
+	}
 }
