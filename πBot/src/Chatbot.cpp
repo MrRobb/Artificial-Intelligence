@@ -30,7 +30,7 @@ Message Chatbot::understandSentence(string &text)
 	
 	// Create request
 	y.url = "https://api.wit.ai/message?v=20180121&q=" + urlEncoding(text);
-	y.headers["Authorization"] = "Bearer QWLCVEWLZEE5JAF64HPDLTXGGNDM7HPF";
+	y.headers["Authorization"] = "Bearer WIXOTR45JU26WFBYK6QIQLHMM4MK4NKL";
 	y.GET;
 	
 	// Execute request
