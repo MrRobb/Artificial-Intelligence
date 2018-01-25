@@ -53,9 +53,9 @@
 		26A541233BC6F736E758F718 /* ofxJSONElement.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxJSONElement.h; path = ../../../addons/ofxJSON/src/ofxJSONElement.h; sourceTree = SOURCE_ROOT; };
 		2C7CF000B7B4F782C187C353 /* json.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = json.h; path = ../../../addons/ofxJSON/libs/jsoncpp/include/json/json.h; sourceTree = SOURCE_ROOT; };
 		61313493CDB52744E22A604D /* json-forwards.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = "json-forwards.h"; path = "../../../addons/ofxJSON/libs/jsoncpp/include/json/json-forwards.h"; sourceTree = SOURCE_ROOT; };
-		7F2D3AE22017A9F7007DD459 /* Graph.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Graph.hpp; path = src/graph/Graph.hpp; sourceTree = SOURCE_ROOT; };
 		7F91DFB02018E9E700799A2B /* Chat.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Chat.cpp; sourceTree = "<group>"; };
 		7F91DFB12018E9E700799A2B /* Chat.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Chat.hpp; sourceTree = "<group>"; };
+		7F9CAD8A2019EC1B00F827D8 /* Graph.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Graph.hpp; sourceTree = "<group>"; };
 		87472D11FE160946D501A175 /* Chatbot.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Chatbot.hpp; path = src/Chatbot.hpp; sourceTree = SOURCE_ROOT; };
 		9129E912A67A1F04227DE7C4 /* InputTextField.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = InputTextField.hpp; path = src/InputTextField.hpp; sourceTree = SOURCE_ROOT; };
 		AE62FFB0DCC2A36DD17BD9B5 /* Chatbot.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Chatbot.cpp; path = src/Chatbot.cpp; sourceTree = SOURCE_ROOT; };
@@ -123,7 +123,7 @@
 		7F2D3AE72017AA72007DD459 /* brain */ = {
 			isa = PBXGroup;
 			children = (
-				7F2D3AE22017A9F7007DD459 /* Graph.hpp */,
+				7F9CAD8A2019EC1B00F827D8 /* Graph.hpp */,
 			);
 			name = brain;
 			path = src/brain;
