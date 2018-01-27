@@ -7,6 +7,8 @@
 
 #include "Chatbot.hpp"
 
+Chatbot::Chatbot(){}
+
 Message Chatbot::whatAreYouTalkingAbout(string text)
 {
 	string s = "";
@@ -24,28 +26,60 @@ Message Chatbot::whatAreYouTalkingAbout(string text)
 	}
 }
 
+bool Chatbot::fillBrain(string path, Chat& chat)
 {
-	ofHttpRequest y;
+	this->brain_file = ofFile (path);
 	
-	// Create request
-	y.url = "https://api.wit.ai/message?v=20180121&q=" + urlEncoding(text);
-	y.headers["Authorization"] = "Bearer WIXOTR45JU26WFBYK6QIQLHMM4MK4NKL";
-	y.GET;
-	
-	// Execute request
-	auto response = ofURLFileLoader().handleRequest(y);
-	
-	// Check response
-	switch (response.status)
+	if (not this->brain_file.exists())
 	{
-		case 400:
-			return {response.data, false};
-			break;
-			
-		default:
-			return {response.error, true};
-			break;
+		this->brain_file.create();
+		this->brain_file.changeMode(ofFile::ReadWrite);
 	}
+	
+	else
+		loadBrain();
+}
+
+bool Chatbot::loadBrain()
+{
+	if (not this->brain_file.canRead())
+		this->brain_file.changeMode(ofFile::ReadWrite);
+	
+	ofxJSON parser;
+	bool b = parser.open(this->brain_file.getFileName());
+	
+	// JSON to Data Structures
+	return (b and JSONToData(parser, brain, entities, relations));
+}
+
+bool Chatbot::saveBrain()
+{
+	if (not this->brain_file.canWrite())
+		this->brain_file.changeMode(ofFile::ReadWrite);
+	
+	// Data Structures to JSON
+	ofxJSON parser;
+	bool b = dataToJSON(parser, brain, entities, relations);
+	
+	return b and parser.save(brain_file.getFileName(), true);
+}
+
+
+bool Chatbot::addValue(Node value)
+{
+	brain[value.value] = value;
+}
+
+bool Chatbot::addEntity(string entity)
+{
+	entities.insert(entity);
+	return true;
+}
+
+bool Chatbot::addRelation(string action)
+{
+	relations.insert(action);
+	return true;
 }
 
 Message Chatbot::understandSentence(string &text)

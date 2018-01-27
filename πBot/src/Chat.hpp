@@ -26,7 +26,7 @@ public:
 	
 	Chat();
 	
-	Chat(ofFile &file);
+	Chat(string path);
 	
 	bool loadChat();
 	

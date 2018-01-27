@@ -9,9 +9,9 @@
 
 Chat::Chat(){}
 
-Chat::Chat(ofFile &file)
+Chat::Chat(string path)
 {
-	this->file = file;
+	this->file = ofFile (path);
 	
 	if (this->file.exists())
 		loadChat();

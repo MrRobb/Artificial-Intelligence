@@ -10,9 +10,9 @@ void ofApp::setup()
 	ofSetBackgroundColorHex(ofHexToInt("0D1B1E"));
 	ofEnableDataPath();
 	
-	// Chatfile
-	ofFile file ("chat.txt");
-	chat = Chat(file);
+	// Load
+	chat = Chat(std::move("chat.txt"));
+	piBot.fillBrain(std::move("brain.json"), chat);
 	
 	// Init
 	w = ofGetWidth();
@@ -26,11 +26,28 @@ void ofApp::setup()
 	
 		// Rect
 	input.setRect(25, h - 100, w - 50, 70, 20);
+	
+	// TEST
+	Node n;
+	n.value = "spanish";
+	n.entity = "language";
+	n.addAttribute("territory", "spain");
+	n.addAttribute("color", "red and yellow");
+	n.addSynonym("castellano");
+	n.addActionToValue(Action("improve"));
+	piBot.addValue(n);
+	piBot.addEntity("language");
+	piBot.addEntity("food");
+	piBot.addEntity("animal");
+	piBot.addRelation("speak");
+	piBot.addRelation("write");
+	piBot.addRelation("talk");
 }
 
 //--------------------------------------------------------------
 void ofApp::update()
 {
+	
 }
 
 //--------------------------------------------------------------
@@ -44,6 +61,7 @@ void ofApp::draw()
 void ofApp::exit()
 {
 	chat.saveChat();
+	piBot.saveBrain();
 }
 
 //--------------------------------------------------------------
@@ -55,6 +73,7 @@ void ofApp::keyPressed(int key)
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key)
 {
+	
 }
 
 //--------------------------------------------------------------

@@ -9,6 +9,8 @@
 #define Chatbot_hpp
 
 #include "ofxJSON.h"
+#include "brain/Graph.hpp"
+#include "Chat.hpp"
 
 using namespace std;
 
@@ -20,12 +22,26 @@ struct Message {
 class Chatbot {
 	
 public:
+	Chatbot();
+	
 	/**
 	 @brief Processes the data and provides little response about his understanding.
 	 @param text The text to process and comment about.
 	 @return Little comment about the data provided.
 	 */
 	Message whatAreYouTalkingAbout(string text);
+	
+	bool fillBrain(string path, Chat& chat);
+	
+	bool loadBrain();
+	
+	bool saveBrain();
+	
+	bool addValue(Node value);
+	
+	bool addEntity(string entity);
+	
+	bool addRelation(string action);
 	
 private:
 	/**
@@ -41,6 +57,16 @@ private:
 	 @post The string is URL ready.
 	 */
 	string urlEncoding(const string &text);
+	
+	Message get(string& url);
+	
+	Graph brain;
+	
+	Entities entities;
+	
+	Relations relations;
+	
+	ofFile brain_file;
 };
 
 #endif /* Chatbot_hpp */
